@@ -45,18 +45,25 @@ const DesktopNavigation = () => {
 
             <li className="nav-links">
               <Tooltip >
-                <NavLink to="/cart">
-                  <span className='nav-icon-span'> Client Login <Badge badgeContent={setProceed ? cart.length : 0}> <AiFillTool className='nav-icon' /></Badge></span>
+                <NavLink to="/register/client">
+                  <span className='nav-icon-span'> Client Signup <Badge badgeContent={setProceed ? cart.length : 0}> <AiFillTool className='nav-icon' /></Badge></span>
                 </NavLink>
               </Tooltip>
             </li>
             <li className="nav-links">
+              <Tooltip >
+                <NavLink to="/register/user">
+                  <span className='nav-icon-span'> User Signup <Badge badgeContent={setProceed ? cart.length : 0}> <CgProfile className='nav-icon' /></Badge></span>
+                </NavLink>
+              </Tooltip>
+            </li>
+            {/* <li className="nav-links">
               <Tooltip>
                 <NavLink to="/wishlist">
                   <span className='nav-icon-span'>About Us  <Badge badgeContent={setProceed ? wishlistData.length : 0}> <AiOutlineCopy className='nav-icon' /></Badge></span>
                 </NavLink>
               </Tooltip>
-            </li>
+            </li> */}
 
             {
               setProceed ?
@@ -78,7 +85,7 @@ const DesktopNavigation = () => {
                 <li className="nav-links">
                   <Tooltip title='Login'>
                     <NavLink to='/login'>
-                      <span className='nav-icon-span'>   <CgProfile style={{ fontSize: 29, marginTop: 7 }} /></span>
+                    <span className='nav-icon-span'> Login<Badge badgeContent={setProceed ? cart.length : 0}> </Badge></span>
                     </NavLink>
                   </Tooltip>
                 </li>

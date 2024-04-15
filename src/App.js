@@ -21,6 +21,7 @@ import AdminRegister from './Admin/Auth/Register/AdminRegister';
 import AdminHomePage from './Admin/Pages/AdminHomePage';
 import SingleUserPage from './Admin/Pages/SingleUserPage';
 import SingleProduct from './Admin/Pages/SingleProduct';
+import GymDetails from './Auth/Gym Details/GymDetails';
 
 
 
@@ -37,7 +38,9 @@ function App() {
             {/*User Routes  */}
             <Route path='/' index element={<HomePage />} />
             <Route path="/login" element={< Login />} />
-            <Route path='/register' element={<Register />} />
+            <Route path='/register/user' element={<Register />} />
+            <Route path='/register/client' element={<Register client/>} />
+            <Route path='/register/gymdetails' element={<GymDetails/>} />
             <Route path='/Detail/type/:cat/:id' element={<ProductDetail />} />
             <Route path='product/type/:cat' element={<SingleCategory />} />
             <Route path='/cart' element={<Cart />} />

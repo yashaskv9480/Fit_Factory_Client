@@ -1,7 +1,7 @@
 import '../Login/login.css'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Avatar, Button, Checkbox, CssBaseline, FormControlLabel, Grid, InputAdornment, TextField, Typography } from '@mui/material'
 import { MdLockOutline } from 'react-icons/md'
 import { Box, Container } from '@mui/system'
@@ -10,11 +10,20 @@ import CopyRight from '../../Components/CopyRight/CopyRight'
 import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import { AiOutlineGoogle } from 'react-icons/ai'
 import Fit_Factory_api from '../../Fit_Factory_Api/Fit_Factory_api'
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 
 
 
-const Register = ({client}) => {
-  const [credentials, setCredentials] = useState({ name: "", email: "", mobile: '', password: "" })
+
+const GymDetails = () => {
+  const location = useLocation();
+  const data = location.state;
+  const [image, setImage] = useState({ preview: '', data: '' })
+  const {name,email,mobile,password} = data; 
+  const [credentials, setCredentials] = useState({ gymname: "", gymimage: "", location: "",address: ""})
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -26,22 +35,29 @@ const Register = ({client}) => {
   }
 
   useEffect(() => {
-    let auth = localStorage.getItem('Authorization');
-    if (auth) {
-      navigate("/")
+    if (!data) {
+      navigate("/register/client")
     }
   }, [])
 
   const handleSubmit = async (e) => {
+    let formData = new FormData()
+    formData.append('image', image.data)
+    console.log(formData)
     e.preventDefault()
     try {
-        const sendAuth = await Fit_Factory_api.post("/user/signup",
-          {
-            name: credentials.name,
-            email: credentials.email,
-            mobile: credentials.mobile,
-            password: credentials.password,
-          })
+        const sendAuth = await fetch('http://localhost:5000/api/client/signup', {
+          method: 'POST',
+          body: formData
+          // name: name,
+          // email: email,  
+          // mobile: mobile,
+          // password: password,
+          // gym_name: credentials.gymname,
+          // gymimage: credentials.gymimage,
+          // location: credentials.location,
+          // address: credentials.address
+        })
         if (sendAuth.status == 200) {
           toast.success("Registered Successfully", { autoClose: 500, theme: 'colored' })
           navigate('/login')
@@ -57,8 +73,12 @@ const Register = ({client}) => {
 
   }
 
-  const handleclientnavigate = () => {
-    navigate("/register/gymdetails", {state: credentials})
+  const handleFileChange = (e) => {
+    const img = {
+      preview: URL.createObjectURL(e.target.files[0]),
+      data: e.target.files[0],
+    }
+    setImage(img)
   }
 
 
@@ -78,76 +98,71 @@ const Register = ({client}) => {
             <MdLockOutline />
           </Avatar>
           <Typography component="h1" variant="h5">
-            {client? "Owner Details" : "User signu"}
+            Gym Details
           </Typography>
 
-          <Box component="form" noValidate onSubmit={client ? handleclientnavigate : handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              size='large'
-            > 
-              <AiOutlineGoogle/>
-            </Button>
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="name"
-                  value={credentials.name}
+                  name="gymname"
+                  value={credentials.gymname}
                   onChange={handleOnChange}
                   required
                   fullWidth
-                  id="name"
-                  label="Name"
+                  id="gymname"
+                  label="Gym Name"
                   autoFocus
                 />
               </Grid>
+              <Grid item xs = {12}>
+              <FormControl sx={{width: 400}}>
+              <InputLabel>Location</InputLabel>
+              <Select
+                name = "location"
+                required
+                fullWidth
+                id="location"
+                label="Location"
+                value={credentials.location}
+                onChange={handleOnChange}
+              >
+                <MenuItem value={"Bengaluru"}>Bengaluru</MenuItem>
+                <MenuItem value={"Hyderabad"}>Hyderabad</MenuItem>
+                <MenuItem value={"Mumbai"}>Mumbai</MenuItem>
+                <MenuItem value={"Chennai"}>Chennai</MenuItem>
+              </Select>
+              </FormControl>
+                </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  value={credentials.email}
+                  id="adress"
+                  label="Complete Address"
+                  multiline
+                  name="address"
+                  value={credentials.address}
+                  rows={3}
                   onChange={handleOnChange}
-                  autoComplete="email"
-
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+              <Button
+                variant="contained"
+                component="label"
+              >
+                Upload Gym Image
+                <input
+                  accept='image/*'
+                  type="file"
                   required
-                  fullWidth
-                  id="phoneNumber"
-                  label="Contact Number"
-                  name="phoneNumber"
-                  value={credentials.phoneNumber}
-                  onChange={handleOnChange}
-                  inputMode='numeric'
+                  id = "gymimage"
+                  name = "gymimage"
+                  onChange={handleFileChange}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end" onClick={handleClickShowPassword} sx={{ cursor: 'pointer' }}>
-                        {showPassword ? <RiEyeFill /> : <RiEyeOffFill />}
-                      </InputAdornment>
-                    )
-                  }}
-                  value={credentials.password}
-                  onChange={handleOnChange}
-                  autoComplete="new-password"
-                />
+              </Button>
               </Grid>
             </Grid>
             <Button
@@ -156,7 +171,7 @@ const Register = ({client}) => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              {client? "Enter Gym Details" : "Sign Up"}
+              Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -174,4 +189,4 @@ const Register = ({client}) => {
   )
 }
 
-export default Register
+export default GymDetails
