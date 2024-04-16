@@ -21,6 +21,7 @@ import FormControl from '@mui/material/FormControl';
 const GymDetails = () => {
   const location = useLocation();
   const data = location.state;
+  console.log(data)
   const [image, setImage] = useState({ preview: '', data: '' })
   const {name,email,mobile,password} = data; 
   const [credentials, setCredentials] = useState({ gymname: "", gymimage: "", location: "",address: ""})
@@ -43,20 +44,21 @@ const GymDetails = () => {
   const handleSubmit = async (e) => {
     let formData = new FormData()
     formData.append('image', image.data)
+
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('mobile', mobile);
+    formData.append('password', password);
+    formData.append('gym_name', credentials.gymname);
+    formData.append('gymimage', credentials.gymimage);
+    formData.append('location', credentials.location);
+    formData.append('address', credentials.address);
     console.log(formData)
     e.preventDefault()
     try {
         const sendAuth = await fetch('http://localhost:5000/api/client/signup', {
           method: 'POST',
           body: formData
-          // name: name,
-          // email: email,  
-          // mobile: mobile,
-          // password: password,
-          // gym_name: credentials.gymname,
-          // gymimage: credentials.gymimage,
-          // location: credentials.location,
-          // address: credentials.address
         })
         if (sendAuth.status == 200) {
           toast.success("Registered Successfully", { autoClose: 500, theme: 'colored' })
@@ -64,7 +66,6 @@ const GymDetails = () => {
         }
         else {
           toast.error("Something went wrong, Please try again", { autoClose: 500, theme: 'colored' })
-          navigate('/')
         }
     } catch (error) {
       toast.error(error.response.data.error[0].msg, { autoClose: 500, theme: 'colored' })

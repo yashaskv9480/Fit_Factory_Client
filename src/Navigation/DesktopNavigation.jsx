@@ -27,7 +27,7 @@ const DesktopNavigation = () => {
       <nav className='nav'>
         <div className="logo">
           <Link to='/'>
-            <span >ABC</span>
+            <span >Fit Factoy</span>
           </Link>
         </div>
         <div className="nav-items">

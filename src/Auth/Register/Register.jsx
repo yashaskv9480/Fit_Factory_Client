@@ -10,12 +10,15 @@ import CopyRight from '../../Components/CopyRight/CopyRight'
 import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import { AiOutlineGoogle } from 'react-icons/ai'
 import Fit_Factory_api from '../../Fit_Factory_Api/Fit_Factory_api'
+import {GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+
 
 
 
 const Register = ({client}) => {
   const [credentials, setCredentials] = useState({ name: "", email: "", mobile: '', password: "" })
   const [showPassword, setShowPassword] = useState(false);
+  const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -62,6 +65,27 @@ const Register = ({client}) => {
   }
 
 
+  const handleGoogleSucess = async (res) => {
+    const {credential, clientId } = res;
+    try{
+      const sendAuth = await Fit_Factory_api.post("/user/google/oauth", {
+        credential,clientId
+      })
+      console.log(sendAuth)
+      if (sendAuth.status == 200){
+        toast.success("Login succesful")
+        navigate("/")
+      }
+    }
+    catch(err){
+      toast.error("Login Error! Please Contact the admin")
+    }
+  }
+
+  const handleGoogleFailure =  (res) => {
+      toast.error("Somthing went wrong.Please try again")
+  }
+
   return (
     <>
       <Container component="main" maxWidth="xs" sx={{ marginBottom: 10 }}>
@@ -78,19 +102,17 @@ const Register = ({client}) => {
             <MdLockOutline />
           </Avatar>
           <Typography component="h1" variant="h5">
-            {client? "Owner Details" : "User signu"}
+            {client? "Owner Details" : "User Signup"}
           </Typography>
-
+            <GoogleOAuthProvider clientId = {process.env.REACT_APP_GOOGLE_CLIENT_ID} >
+            <GoogleLogin
+                onSuccess={handleGoogleSucess}
+                onError={handleGoogleFailure}
+                />
+              </GoogleOAuthProvider>
           <Box component="form" noValidate onSubmit={client ? handleclientnavigate : handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              size='large'
-            > 
-              <AiOutlineGoogle/>
-            </Button>
+
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
@@ -121,10 +143,10 @@ const Register = ({client}) => {
                 <TextField
                   required
                   fullWidth
-                  id="phoneNumber"
+                  id="mobile"
                   label="Contact Number"
-                  name="phoneNumber"
-                  value={credentials.phoneNumber}
+                  name="mobile"
+                  value={credentials.mobile}
                   onChange={handleOnChange}
                   inputMode='numeric'
                 />
