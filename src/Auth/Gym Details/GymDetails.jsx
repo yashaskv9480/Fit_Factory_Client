@@ -68,8 +68,14 @@ const GymDetails = () => {
           toast.error("Something went wrong, Please try again", { autoClose: 500, theme: 'colored' })
         }
     } catch (error) {
-      toast.error(error.response.data.error[0].msg, { autoClose: 500, theme: 'colored' })
+      if(error.response.status == 409){
+        toast.error("User already exists please sign in!", {autoClose: 500})
+        navigate('/login')
+      }
+      else{
+        toast.error(error.response.data.error[0].msg, { autoClose: 500, theme: 'colored' })
 
+      }
     }
 
   }

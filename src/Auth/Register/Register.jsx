@@ -45,6 +45,7 @@ const Register = ({client}) => {
             mobile: credentials.mobile,
             password: credentials.password,
           })
+        console.log(sendAuth.status)
         if (sendAuth.status == 200) {
           toast.success("Registered Successfully", { autoClose: 500, theme: 'colored' })
           navigate('/login')
@@ -54,9 +55,15 @@ const Register = ({client}) => {
           navigate('/')
         }
     } catch (error) {
-      toast.error(error.response.data.error[0].msg, { autoClose: 500, theme: 'colored' })
+      if(error.response.status == 409){
+        toast.error("User already exists please sign in!")
+        navigate('/login')
+      }
+      else{
+        toast.error(error.response.data.error[0].msg, { autoClose: 500, theme: 'colored' })
 
-    }
+      }
+     }
 
   }
 
@@ -71,9 +78,9 @@ const Register = ({client}) => {
       const sendAuth = await Fit_Factory_api.post("/user/google/oauth", {
         credential,clientId
       })
-      console.log(sendAuth)
       if (sendAuth.status == 200){
         toast.success("Login succesful")
+        console.log(sendAuth.data)
         navigate("/")
       }
     }
@@ -101,15 +108,20 @@ const Register = ({client}) => {
           <Avatar sx={{ m: 1, bgcolor: '#1976d2' }}>
             <MdLockOutline />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{mb: 2}}>
             {client? "Owner Details" : "User Signup"}
           </Typography>
-            <GoogleOAuthProvider clientId = {process.env.REACT_APP_GOOGLE_CLIENT_ID} >
+          { !client &&
+         <GoogleOAuthProvider clientId = {process.env.REACT_APP_GOOGLE_CLIENT_ID} >
             <GoogleLogin
                 onSuccess={handleGoogleSucess}
                 onError={handleGoogleFailure}
+                size='large'
+                theme='filled_blue'
+                shape='circle'
+                width="400"
                 />
-              </GoogleOAuthProvider>
+              </GoogleOAuthProvider>}
           <Box component="form" noValidate onSubmit={client ? handleclientnavigate : handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
 

@@ -10,18 +10,31 @@ import { toast } from 'react-toastify';
 import { getCart, getWishList, handleLogOut, handleClickOpen, handleClose, Transition } from '../Constants/Constant'
 
 const DesktopNavigation = () => {
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
   const { cart, setCart, wishlistData, setWishlistData } = useContext(ContextFunction)
   const [openAlert, setOpenAlert] = useState(false);
   const navigate = useNavigate()
   let authToken = localStorage.getItem('Authorization');
   let setProceed = authToken !== null ? true : false
+  // let setProceed = true
   useEffect(() => {
     getCart(setProceed, setCart, authToken)
     getWishList(setProceed, setWishlistData, authToken)
   }, [])
 
 
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
+  
   return (
     <>
       <nav className='nav'>
@@ -44,7 +57,8 @@ const DesktopNavigation = () => {
             </li> */}
 
             <li className="nav-links">
-              <Tooltip >
+              <Tooltip title="Client login/Signup">
+                
                 <NavLink to="/register/client">
                   <span className='nav-icon-span'> Client Signup <Badge badgeContent={setProceed ? cart.length : 0}> <AiFillTool className='nav-icon' /></Badge></span>
                 </NavLink>
@@ -56,7 +70,7 @@ const DesktopNavigation = () => {
                   <span className='nav-icon-span'> User Signup <Badge badgeContent={setProceed ? cart.length : 0}> <CgProfile className='nav-icon' /></Badge></span>
                 </NavLink>
               </Tooltip>
-            </li>
+              </li>
             {/* <li className="nav-links">
               <Tooltip>
                 <NavLink to="/wishlist">
@@ -89,6 +103,7 @@ const DesktopNavigation = () => {
                     </NavLink>
                   </Tooltip>
                 </li>
+                
             }
           </ul>
         </div>

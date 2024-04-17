@@ -8,14 +8,18 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { MdLockOutline } from 'react-icons/md'
 import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
-
+import Fit_Factory_api from '../../Fit_Factory_Api/Fit_Factory_api'
 import CopyRight from '../../Components/CopyRight/CopyRight'
+import {GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import Cookies from 'universal-cookie'
+
 
 
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" })
   const [showPassword, setShowPassword] = useState(false);
+  const cookies = new Cookies();
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -24,31 +28,26 @@ const Login = () => {
   const handleOnChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value })
   }
+
   useEffect(() => {
     let auth = localStorage.getItem('Authorization');
     if (auth) {
       navigate("/")
     }
   }, [])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     try {
-      if (!credentials.email && !credentials.password) {
-        toast.error("All fields are required", { autoClose: 500, theme: 'colored' })
-      }
-      else if (!emailRegex.test(credentials.email)) {
-        toast.error("Please enter a valid email", { autoClose: 500, theme: 'colored' })
-      }
-      else if (credentials.password.length < 5) {
-        toast.error("Please enter valid password", { autoClose: 500, theme: 'colored' })
-      }
-      else if (credentials.email && credentials.password) {
-        const sendAuth = await axios.post(`${process.env.REACT_APP_LOGIN}`, { email: credentials.email, password: credentials.password })
+        const sendAuth = await Fit_Factory_api.post(`/user/login` ,{email: credentials.email, password: credentials.password }, {
+          withCredentials: true
+      });
+        console.log(sendAuth)
         const receive = await sendAuth.data
-        if (receive.success === true) {
+        console.log(receive)
+        if (sendAuth.status == 200) {
           toast.success("Login Successfully", { autoClose: 500, theme: 'colored' })
-          localStorage.setItem('Authorization', receive.authToken)
+          cookies.set('Authorization',receive.token,{path: '/'})
           navigate('/')
         }
         else{
@@ -56,14 +55,32 @@ const Login = () => {
           navigate('/')
         }
       }
-    }
     catch (error) {
-      error.response.data.error.length === 1 ?
-        toast.error(error.response.data.error[0].msg, { autoClose: 500, theme: 'colored' })
-        : toast.error(error.response.data.error, { autoClose: 500, theme: 'colored' })
+          toast.error("Unable to login")
     }
-
   }
+
+  const handleGoogleSucess = async (res) => {
+    const {credential, clientId } = res;
+    try{
+      const sendAuth = await Fit_Factory_api.post("/user/google/oauth", {
+        credential,clientId
+      })
+      if (sendAuth.status == 200){
+        toast.success("Login succesful")
+        console.log(sendAuth.data)
+        navigate("/")
+      }
+    }
+    catch(err){
+      toast.error("Login Error! Please Contact the admin")
+    }
+  }
+
+  const handleGoogleFailure =  (res) => {
+      toast.error("Somthing went wrong.Please try again")
+  }
+
 
 
   return (
@@ -78,13 +95,25 @@ const Login = () => {
           alignItems: 'center',
         }}
       >
+        
         <Avatar sx={{ m: 1, bgcolor: '#1976d2' }}>
           <MdLockOutline />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" sx={{mb: 2}}>
           Sign in
         </Typography>
+        <GoogleOAuthProvider clientId = {process.env.REACT_APP_GOOGLE_CLIENT_ID} >
+            <GoogleLogin
+                onSuccess={handleGoogleSucess}
+                onError={handleGoogleFailure}
+                size='large'
+                theme='filled_blue'
+                shape='circle'
+                width="400"
+                />
+              </GoogleOAuthProvider> 
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+
           <TextField
             margin="normal"
             required
