@@ -23,17 +23,7 @@ const getWishList = async (setProceed, setWishlistData, authToken) => {
         setWishlistData(data)
     }
 }
-const handleLogOut = (setProceed, toast, navigate, setOpenAlert) => {
-    if (setProceed) {
-        localStorage.removeItem('Authorization')
-        toast.success("Logout Successfully", { autoClose: 500, theme: 'colored' })
-        navigate('/')
-        setOpenAlert(false)
-    }
-    else {
-        toast.error("User is already logged of", { autoClose: 500, theme: 'colored' })
-    }
-}
+
 
 const handleClickOpen = (setOpenAlert) => {
     setOpenAlert(true);
@@ -42,6 +32,7 @@ const handleClickOpen = (setOpenAlert) => {
 const handleClose = (setOpenAlert) => {
     setOpenAlert(false);
 };
+
 const getAllProducts = async (setData) => {
     try {
         const { data } = await axios.get(process.env.REACT_APP_FETCH_PRODUCT);
@@ -69,4 +60,4 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 
 
-export { getCart, getWishList, handleClickOpen, handleClose, handleLogOut, getAllProducts, getSingleProduct, Transition }
+export { getCart, getWishList, handleClickOpen, handleClose, getAllProducts, getSingleProduct, Transition }

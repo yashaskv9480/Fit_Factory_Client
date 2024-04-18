@@ -7,23 +7,20 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Badge, Button, Dialog, DialogActions, DialogContent, Menu, MenuItem, Slide, Tooltip, Typography } from '@mui/material';
 import { ContextFunction } from '../Context/Context';
 import { toast } from 'react-toastify';
-import { getCart, getWishList, handleLogOut, handleClickOpen, handleClose, Transition } from '../Constants/Constant'
+import { getCart, getWishList, handleClickOpen, handleClose, Transition } from '../Constants/Constant'
+import Cookies from 'js-cookie'
+import Fit_Factory_api from '../Fit_Factory_Api/Fit_Factory_api'
+import { useAuth } from '../Auth/useAuth/useAuth'
 
 const DesktopNavigation = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [proceed,setProceed] = useState(false)
+  const auth = useAuth();
+  const token = auth ?  auth.token : null
   const open = Boolean(anchorEl);
   const { cart, setCart, wishlistData, setWishlistData } = useContext(ContextFunction)
   const [openAlert, setOpenAlert] = useState(false);
   const navigate = useNavigate()
-  let authToken = localStorage.getItem('Authorization');
-  let setProceed = authToken !== null ? true : false
-  // let setProceed = true
-  useEffect(() => {
-    getCart(setProceed, setCart, authToken)
-    getWishList(setProceed, setWishlistData, authToken)
-  }, [])
-
-
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,13 +31,25 @@ const DesktopNavigation = () => {
   };
 
 
+  const handleLogOut = () => {
+    if (setProceed) {
+        Cookies.remove('Authorization')
+        toast.success("Logout Successfully", { autoClose: 500, theme: 'colored' })
+        navigate('/')
+        setOpenAlert(false)
+    }
+    else {
+        toast.error("User is already logged of", { autoClose: 500, theme: 'colored' })
+    }
+}
+
   
   return (
     <>
       <nav className='nav'>
         <div className="logo">
           <Link to='/'>
-            <span >Fit Factoy</span>
+            <span >Fit Factory</span>
           </Link>
         </div>
         <div className="nav-items">
@@ -55,22 +64,6 @@ const DesktopNavigation = () => {
                 <span className='nav-icon-span'>  Contact Us</span>
               </NavLink>
             </li> */}
-
-            <li className="nav-links">
-              <Tooltip title="Client login/Signup">
-                
-                <NavLink to="/register/client">
-                  <span className='nav-icon-span'> Client Signup <Badge badgeContent={setProceed ? cart.length : 0}> <AiFillTool className='nav-icon' /></Badge></span>
-                </NavLink>
-              </Tooltip>
-            </li>
-            <li className="nav-links">
-              <Tooltip >
-                <NavLink to="/register/user">
-                  <span className='nav-icon-span'> User Signup <Badge badgeContent={setProceed ? cart.length : 0}> <CgProfile className='nav-icon' /></Badge></span>
-                </NavLink>
-              </Tooltip>
-              </li>
             {/* <li className="nav-links">
               <Tooltip>
                 <NavLink to="/wishlist">
@@ -80,7 +73,7 @@ const DesktopNavigation = () => {
             </li> */}
 
             {
-              setProceed ?
+              token ?
                 <>
                   <li className="nav-links">
                     <Tooltip title='Profile'>
@@ -96,6 +89,22 @@ const DesktopNavigation = () => {
                   </li>
                 </>
                 :
+                <>
+                            <li className="nav-links">
+              <Tooltip >
+                <NavLink to="/register/user">
+                  <span className='nav-icon-span'> User Signup <Badge badgeContent={setProceed ? cart.length : 0}> <CgProfile className='nav-icon' /></Badge></span>
+                </NavLink>
+              </Tooltip>
+              </li>
+                  <li className="nav-links">
+                <Tooltip title="Client login/Signup">
+                  
+                  <NavLink to="/register/client">
+                    <span className='nav-icon-span'> Client Signup <Badge badgeContent={setProceed ? cart.length : 0}> <AiFillTool className='nav-icon' /></Badge></span>
+                  </NavLink>
+                </Tooltip>
+              </li>
                 <li className="nav-links">
                   <Tooltip title='Login'>
                     <NavLink to='/login'>
@@ -103,7 +112,7 @@ const DesktopNavigation = () => {
                     </NavLink>
                   </Tooltip>
                 </li>
-                
+                </>             
             }
           </ul>
         </div>
@@ -120,7 +129,7 @@ const DesktopNavigation = () => {
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <Link to="/">
-            <Button variant='contained' endIcon={<FiLogOut />} color='primary' onClick={() => handleLogOut(setProceed, toast, navigate, setOpenAlert)}>Logout</Button></Link>
+            <Button variant='contained' endIcon={<FiLogOut />} color='primary' onClick={handleLogOut}>Logout</Button></Link>
           <Button variant='contained' color='error' endIcon={<AiFillCloseCircle />} onClick={() => handleClose(setOpenAlert)}>Close</Button>
         </DialogActions>
       </Dialog>

@@ -9,9 +9,19 @@ import BannerData from '../../Helpers/HomePageBanner';
 import Carousel from '../../Components/Carousel/Carousel'
 import SearchBar from '../../Components/SearchBar/SearchBar'
 import CopyRight from '../../Components/CopyRight/CopyRight'
+import { jwtDecode } from 'jwt-decode'
+import Cookies from 'js-cookie'
+import { useAuth } from '../../Auth/useAuth/useAuth'
+
+
+
 const HomePage = () => {
     const { setCart } = useContext(ContextFunction)
     let authToken = localStorage.getItem('Authorization')
+    let auth = useAuth()
+    const isUser = auth ? isUser : null
+    let token = auth ? token : null
+
     useEffect(() => {
         getCart()
         window.scroll(0, 0)
@@ -28,8 +38,6 @@ const HomePage = () => {
         }
 
     }
-
-
 
     return (
         <>

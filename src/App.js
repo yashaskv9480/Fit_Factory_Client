@@ -22,6 +22,7 @@ import AdminHomePage from './Admin/Pages/AdminHomePage';
 import SingleUserPage from './Admin/Pages/SingleUserPage';
 import SingleProduct from './Admin/Pages/SingleProduct';
 import GymDetails from './Auth/Gym Details/GymDetails';
+import { Redirect } from './Redirect/Redirect';
 
 
 
@@ -50,6 +51,7 @@ function App() {
             <Route path='/paymentsuccess' element={<PaymentSuccess />} />
             <Route path='/forgotpassword' element={<ForgotPasswordForm />} />
             <Route path='/user/reset/:id/:token' element={<AddNewPassword />} />
+            <Route path='/redirect' element={<Redirect />} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={< AdminLogin />} />

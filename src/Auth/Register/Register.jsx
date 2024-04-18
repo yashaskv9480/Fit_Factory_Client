@@ -11,14 +11,16 @@ import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import { AiOutlineGoogle } from 'react-icons/ai'
 import Fit_Factory_api from '../../Fit_Factory_Api/Fit_Factory_api'
 import {GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import {CircularProgress} from '@mui/material'
+import Cookies from 'js-cookie'
 
 
 
 
 const Register = ({client}) => {
+  const [loading,setloading] = useState(false)
   const [credentials, setCredentials] = useState({ name: "", email: "", mobile: '', password: "" })
   const [showPassword, setShowPassword] = useState(false);
-  const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -36,6 +38,7 @@ const Register = ({client}) => {
   }, [])
 
   const handleSubmit = async (e) => {
+    setloading(true)
     e.preventDefault()
     try {
         const sendAuth = await Fit_Factory_api.post("/user/signup",
@@ -51,17 +54,19 @@ const Register = ({client}) => {
           navigate('/login')
         }
         else {
+          setloading(false)
           toast.error("Something went wrong, Please try again", { autoClose: 500, theme: 'colored' })
           navigate('/')
         }
     } catch (error) {
       if(error.response.status == 409){
+        setloading(false)
         toast.error("User already exists please sign in!")
         navigate('/login')
       }
       else{
+        setloading(false)
         toast.error(error.response.data.error[0].msg, { autoClose: 500, theme: 'colored' })
-
       }
      }
 
@@ -73,18 +78,22 @@ const Register = ({client}) => {
 
 
   const handleGoogleSucess = async (res) => {
+    setloading(true)
     const {credential, clientId } = res;
     try{
       const sendAuth = await Fit_Factory_api.post("/user/google/oauth", {
         credential,clientId
       })
+      const receive = sendAuth.data;
+      console.log(receive)
       if (sendAuth.status == 200){
         toast.success("Login succesful")
-        console.log(sendAuth.data)
-        navigate("/")
+        Cookies.set("Authorization",receive.token,{expires: 1})
+        navigate("/redirect")
       }
     }
     catch(err){
+      setloading(false)
       toast.error("Login Error! Please Contact the admin")
     }
   }
@@ -97,6 +106,11 @@ const Register = ({client}) => {
     <>
       <Container component="main" maxWidth="xs" sx={{ marginBottom: 10 }}>
         <CssBaseline />
+        {loading ? (
+                    <section style={{ display: 'flex', flexWrap: "wrap", width: "100%", justifyContent: "space-around", alignItems: 'center' }}>
+                    <CircularProgress/>
+                    </section>
+                ) : (
         <Box
           sx={{
             marginTop: 8,
@@ -201,7 +215,7 @@ const Register = ({client}) => {
               </Grid>
             </Grid>
           </Box>
-        </Box>
+        </Box> )}
         <CopyRight sx={{ mt: 5 }} />
       </Container>
     </>

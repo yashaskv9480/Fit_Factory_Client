@@ -4,23 +4,24 @@ import { Box, Container } from '@mui/system'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, redirect, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { MdLockOutline } from 'react-icons/md'
 import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import Fit_Factory_api from '../../Fit_Factory_Api/Fit_Factory_api'
 import CopyRight from '../../Components/CopyRight/CopyRight'
 import {GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import Cookies from 'universal-cookie'
-
+import {Skeleton} from '@mui/material'
+import {CircularProgress} from '@mui/material'
+import Cookies from 'js-cookie'
 
 
 
 const Login = () => {
+  const [loading,setloading] = useState(false)
   const [credentials, setCredentials] = useState({ email: "", password: "" })
   const [showPassword, setShowPassword] = useState(false);
-  const cookies = new Cookies();
-  const handleClickShowPassword = () => {
+    const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
   const navigate = useNavigate()
@@ -38,46 +39,50 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setloading(true)
     try {
-        const sendAuth = await Fit_Factory_api.post(`/user/login` ,{email: credentials.email, password: credentials.password }, {
-          withCredentials: true
-      });
+        const sendAuth = await Fit_Factory_api.post(`/user/login` ,{email: credentials.email, password: credentials.password });
         console.log(sendAuth)
         const receive = await sendAuth.data
         console.log(receive)
         if (sendAuth.status == 200) {
           toast.success("Login Successfully", { autoClose: 500, theme: 'colored' })
-          cookies.set('Authorization',receive.token,{path: '/'})
-          navigate('/')
-        }
-        else{
-          toast.error("Something went wrong, Please try again", { autoClose: 500, theme: 'colored' })
-          navigate('/')
+          Cookies.set("Authorization",receive.token,{expires: 1})
+          navigate('/redirect')
         }
       }
     catch (error) {
-          toast.error("Unable to login")
+      setloading(false)
+        if(error.response.status == 404){
+          toast.error("Wrong Email and Password! Please Contact Admin")
+        }
+        else{
+          toast.error("Somthing went wrong! Please try again later")
+        }
     }
   }
 
   const handleGoogleSucess = async (res) => {
+    setloading(true)
     const {credential, clientId } = res;
     try{
       const sendAuth = await Fit_Factory_api.post("/user/google/oauth", {
         credential,clientId
       })
+      const receive = sendAuth.data;
       if (sendAuth.status == 200){
-        toast.success("Login succesful")
-        console.log(sendAuth.data)
-        navigate("/")
+        Cookies.set("Authorization",receive.token,{expires: 1})
+        navigate("/redirect")
       }
     }
     catch(err){
+      setloading(false)
       toast.error("Login Error! Please Contact the admin")
     }
   }
 
   const handleGoogleFailure =  (res) => {
+      setloading(false)
       toast.error("Somthing went wrong.Please try again")
   }
 
@@ -87,6 +92,11 @@ const Login = () => {
     <div>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
+      {loading ? (
+                    <section style={{ display: 'flex', flexWrap: "wrap", width: "100%", justifyContent: "space-around", alignItems: 'center' }}>
+                    <CircularProgress/>
+                    </section>
+                ) : (
       <Box
         sx={{
           marginTop: 8,
@@ -95,8 +105,7 @@ const Login = () => {
           alignItems: 'center',
         }}
       >
-        
-        <Avatar sx={{ m: 1, bgcolor: '#1976d2' }}>
+         <Avatar sx={{ m: 1, bgcolor: '#1976d2' }}>
           <MdLockOutline />
         </Avatar>
         <Typography component="h1" variant="h5" sx={{mb: 2}}>
@@ -162,7 +171,7 @@ const Login = () => {
             </Grid>
           </Grid>
         </Box>
-      </Box>
+      </Box> )}
     </Container>
     <CopyRight sx = {{mt: 8}}/>          
     </div>

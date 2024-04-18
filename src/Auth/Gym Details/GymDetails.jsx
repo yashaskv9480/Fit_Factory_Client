@@ -21,7 +21,6 @@ import FormControl from '@mui/material/FormControl';
 const GymDetails = () => {
   const location = useLocation();
   const data = location.state;
-  console.log(data)
   const [image, setImage] = useState({ preview: '', data: '' })
   const {name,email,mobile,password} = data; 
   const [credentials, setCredentials] = useState({ gymname: "", gymimage: "", location: "",address: ""})

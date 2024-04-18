@@ -9,7 +9,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Badge, Button, Dialog, DialogActions, DialogContent, Slide, Typography } from '@mui/material';
 import { ContextFunction } from '../Context/Context';
 import { toast } from 'react-toastify';
-import { Transition, getCart, getWishList, handleClickOpen, handleClose, handleLogOut } from '../Constants/Constant';
+import { Transition, getCart, getWishList, handleClickOpen, handleClose } from '../Constants/Constant';
 
 
 const MobileNavigation = () => {
@@ -85,7 +85,7 @@ const MobileNavigation = () => {
                     <Typography variant='h6'>  Do You Want To Logout?</Typography>
                 </DialogContent>
                 <DialogActions sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                    <Button variant='contained' endIcon={<FiLogOut />} color='primary' onClick={() => handleLogOut(setProceed, toast, navigate, setOpenAlert)}>Logout</Button>
+                    <Button variant='contained' endIcon={<FiLogOut />} color='primary' >Logout</Button>
                     <Button variant='contained' color='error' endIcon={<AiFillCloseCircle />} onClick={()=>handleClose(setOpenAlert)}>Close</Button>
                 </DialogActions>
             </Dialog>
