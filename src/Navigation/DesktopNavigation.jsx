@@ -36,6 +36,7 @@ const DesktopNavigation = () => {
         Cookies.remove('Authorization')
         toast.success("Logout Successfully", { autoClose: 500, theme: 'colored' })
         navigate('/')
+        window.location.reload()
         setOpenAlert(false)
     }
     else {

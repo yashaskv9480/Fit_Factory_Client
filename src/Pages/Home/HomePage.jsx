@@ -14,13 +14,11 @@ import Cookies from 'js-cookie'
 import { useAuth } from '../../Auth/useAuth/useAuth'
 
 
-
 const HomePage = () => {
     const { setCart } = useContext(ContextFunction)
     let authToken = localStorage.getItem('Authorization')
     let auth = useAuth()
-    const isUser = auth ? isUser : null
-    let token = auth ? token : null
+    const isUser = auth ? (auth.isUser ? true : null) : null;
 
     useEffect(() => {
         getCart()
@@ -42,13 +40,13 @@ const HomePage = () => {
     return (
         <>
             <Container maxWidth='xl' style={{ display: 'flex', justifyContent: "center", padding: 0, flexDirection: "column", marginBottom: 70 }}>
-                <Box padding={1}>
+            {!isUser && (<Box padding={1}>
                     <Carousel />
-                </Box>
-                {/* <Container style={{ marginTop: 90, display: "flex", justifyContent: 'center' }}>
+                </Box>)}
+                {isUser && (<Container style={{ marginTop: 90, display: "flex", justifyContent: 'center' }}>
                     <SearchBar />
-                </Container> */}
-                <Typography variant='h3' sx={{ textAlign: 'center', marginTop: 10, color: '#1976d2', fontWeight: 'bold' }}>Locations</Typography>
+                </Container>)}
+                <Typography variant='h3' sx={{ textAlign: 'center', marginTop: 10, color: '#1976d2', fontWeight: 'bold' }}>{isUser ? "Choose your Location" : "Locations"}</Typography>
                 <Container maxWidth='xl' style={{ marginTop: 90, display: "flex", justifyContent: 'center', flexGrow: 1, flexWrap: 'wrap', gap: 20, }}>
                     {
                         BannerData.map(data => (

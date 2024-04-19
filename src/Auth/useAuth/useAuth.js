@@ -11,7 +11,6 @@ export const useAuth = () => {
     if(token){
         const decoded = jwtDecode(token)
         const {name,role} = decoded;
-
         if(role == 'client'){
             isClient = true;
         }

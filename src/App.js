@@ -43,7 +43,7 @@ function App() {
             <Route path='/register/client' element={<Register client/>} />
             <Route path='/register/gymdetails' element={<GymDetails/>} />
             <Route path='/Detail/type/:cat/:id' element={<ProductDetail />} />
-            <Route path='product/type/:cat' element={<SingleCategory />} />
+            <Route path='gyms/:location' element={<SingleCategory />} />
             <Route path='/cart' element={<Cart />} />
             <Route path='/wishlist' element={<Wishlist />} />
             <Route path='/checkout' element={<CheckoutForm />} />
@@ -52,6 +52,7 @@ function App() {
             <Route path='/forgotpassword' element={<ForgotPasswordForm />} />
             <Route path='/user/reset/:id/:token' element={<AddNewPassword />} />
             <Route path='/redirect' element={<Redirect />} />
+
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={< AdminLogin />} />

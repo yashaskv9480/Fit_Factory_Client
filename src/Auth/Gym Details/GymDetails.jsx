@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-
+import {CircularProgress} from '@mui/material'
 
 
 
@@ -23,7 +23,8 @@ const GymDetails = () => {
   const data = location.state;
   const [image, setImage] = useState({ preview: '', data: '' })
   const {name,email,mobile,password} = data; 
-  const [credentials, setCredentials] = useState({ gymname: "", gymimage: "", location: "",address: ""})
+  const [credentials, setCredentials] = useState({ gymname: "", gymimage: "", location: "",address: "",price: ""})
+  const [loading,setloading] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -41,6 +42,7 @@ const GymDetails = () => {
   }, [])
 
   const handleSubmit = async (e) => {
+    setloading(true)
     let formData = new FormData()
     formData.append('image', image.data)
 
@@ -60,18 +62,22 @@ const GymDetails = () => {
           body: formData
         })
         if (sendAuth.status == 200) {
+          setloading(false)
           toast.success("Registered Successfully", { autoClose: 500, theme: 'colored' })
           navigate('/login')
         }
         else {
+          setloading(false)
           toast.error("Something went wrong, Please try again", { autoClose: 500, theme: 'colored' })
         }
     } catch (error) {
       if(error.response.status == 409){
+        setloading(false)
         toast.error("User already exists please sign in!", {autoClose: 500})
         navigate('/login')
       }
       else{
+        setloading(false)
         toast.error(error.response.data.error[0].msg, { autoClose: 500, theme: 'colored' })
 
       }
@@ -92,6 +98,11 @@ const GymDetails = () => {
     <>
       <Container component="main" maxWidth="xs" sx={{ marginBottom: 10 }}>
         <CssBaseline />
+        {loading ? (
+                    <section style={{ display: 'flex', flexWrap: "wrap", width: "100%", justifyContent: "space-around", alignItems: 'center' }}>
+                    <CircularProgress/>
+                    </section>
+                ) : (
         <Box
           sx={{
             marginTop: 8,
@@ -134,13 +145,26 @@ const GymDetails = () => {
                 value={credentials.location}
                 onChange={handleOnChange}
               >
-                <MenuItem value={"Bengaluru"}>Bengaluru</MenuItem>
-                <MenuItem value={"Hyderabad"}>Hyderabad</MenuItem>
-                <MenuItem value={"Mumbai"}>Mumbai</MenuItem>
-                <MenuItem value={"Chennai"}>Chennai</MenuItem>
+                <MenuItem value={"bengaluru"}>Bengaluru</MenuItem>
+                <MenuItem value={"hyderabad"}>Hyderabad</MenuItem>
+                <MenuItem value={"mumbai"}>Mumbai</MenuItem>
+                <MenuItem value={"chennai"}>Chennai</MenuItem>
               </Select>
               </FormControl>
                 </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="adress"
+                  label="Complete Address"
+                  multiline
+                  name="address"
+                  value={credentials.address}
+                  rows={3}
+                  onChange={handleOnChange}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -188,7 +212,7 @@ const GymDetails = () => {
               </Grid>
             </Grid>
           </Box>
-        </Box>
+        </Box>)}
         <CopyRight sx={{ mt: 5 }} />
       </Container>
     </>
