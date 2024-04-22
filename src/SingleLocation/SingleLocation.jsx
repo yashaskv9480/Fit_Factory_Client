@@ -4,13 +4,12 @@ import { Link, useParams } from 'react-router-dom'
 import { Container } from '@mui/system'
 import { Typography } from '@mui/material'
 import Loading from '../Components/loading/Loading'
-import ProductCard from '../Components/Card/Product Card/ProductCard'
+import ProductCard from '../Components/Card/GymCard/GymCard'
 import CopyRight from '../Components/CopyRight/CopyRight'
 import Fit_Factory_api from '../Fit_Factory_Api/Fit_Factory_api'
+import GymCard from '../Components/Card/GymCard/GymCard'
 
-
-
-const SingleCategory = () => {
+const SingleLocation = () => {
 
     const [gyms, setGyms] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -60,7 +59,7 @@ const SingleCategory = () => {
                 <Container maxWidth='xl' style={{ marginTop: 10,  justifyContent: 'center', flexWrap: "wrap", paddingBottom: 20, marginBottom: 30}}>
                     {gyms.map(gym => (
                         <Link to={`/Detail/type/${cat}/${gym.gym_id}`} key={gym.gym_id} sx={{marginBottom: 2}}>
-                            <ProductCard gym={gym} />
+                            <GymCard gym={gym} />
                         </Link>
                     ))}
                 </Container> }
@@ -71,6 +70,4 @@ const SingleCategory = () => {
 }
 
 
-export default SingleCategory
-
-    //         
+export default SingleLocation        

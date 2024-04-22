@@ -23,7 +23,7 @@ const GymDetails = () => {
   const data = location.state;
   const [image, setImage] = useState({ preview: '', data: '' })
   const {name,email,mobile,password} = data; 
-  const [credentials, setCredentials] = useState({ gymname: "", gymimage: "", location: "",address: "",price: ""})
+  const [credentials, setCredentials] = useState({ gymname: "", gymimage: "", location: "",address: "",gym_price: ""})
   const [loading,setloading] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -54,6 +54,7 @@ const GymDetails = () => {
     formData.append('gymimage', credentials.gymimage);
     formData.append('location', credentials.location);
     formData.append('address', credentials.address);
+    formData.append('gym_price', credentials.gym_price);
     console.log(formData)
     e.preventDefault()
     try {
@@ -156,7 +157,7 @@ const GymDetails = () => {
                 <TextField
                   required
                   fullWidth
-                  id="adress"
+                  id="address"
                   label="Complete Address"
                   multiline
                   name="address"
@@ -169,12 +170,10 @@ const GymDetails = () => {
                 <TextField
                   required
                   fullWidth
-                  id="adress"
-                  label="Complete Address"
-                  multiline
-                  name="address"
-                  value={credentials.address}
-                  rows={3}
+                  id="gym_price"
+                  label="Price Per Day"
+                  name="gym_price"
+                  value={credentials.gym_price}
                   onChange={handleOnChange}
                 />
               </Grid>

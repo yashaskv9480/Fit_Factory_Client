@@ -24,7 +24,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ContextFunction } from '../../Context/Context';
 import ProductReview from '../../Components/Review/ProductReview';
-import ProductCard from '../../Components/Card/Product Card/ProductCard';
+import ProductCard from '../../Components/Card/GymCard/GymCard';
 import { Transition, getSingleProduct } from '../../Constants/Constant';
 import CopyRight from '../../Components/CopyRight/CopyRight';
 

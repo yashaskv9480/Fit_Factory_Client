@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import ProductCard from '../../../Components/Card/Product Card/ProductCard';
+import ProductCard from '../../../Components/Card/GymCard/GymCard';
 import { Link } from 'react-router-dom';
 
 const UserOrderItem = ({ commonGetRequest, id }) => {

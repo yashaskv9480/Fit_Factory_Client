@@ -5,7 +5,6 @@ import Login from './Auth/Login/Login';
 import Register from './Auth/Register/Register';
 import Cart from './Pages/Cart/Cart';
 import ProductDetail from './Pages/Detail/ProductDetail';
-import SingleCategory from './SingleCategory/SingleCategory';
 import MobileNavigation from './Navigation/MobileNavigation';
 import DesktopNavigation from './Navigation/DesktopNavigation';
 import Wishlist from './Pages/WhisList/Wishlist';
@@ -18,14 +17,11 @@ import ForgotPasswordForm from './Auth/ForgotPassword/ForgotPasswordForm';
 import AddNewPassword from './Auth/ForgotPassword/AddNewPassword';
 import AdminLogin from './Admin/Auth/Login/AdminLogin';
 import AdminRegister from './Admin/Auth/Register/AdminRegister';
-import AdminHomePage from './Admin/Pages/AdminHomePage';
+import DashBoard from './Admin/Pages/DashBoard';
 import SingleUserPage from './Admin/Pages/SingleUserPage';
 import SingleProduct from './Admin/Pages/SingleProduct';
 import GymDetails from './Auth/Gym Details/GymDetails';
-import { Redirect } from './Redirect/Redirect';
-
-
-
+import SingleLocation from './SingleLocation/SingleLocation';
 
 
 function App() {
@@ -38,12 +34,13 @@ function App() {
           <Routes>
             {/*User Routes  */}
             <Route path='/' index element={<HomePage />} />
-            <Route path="/login" element={< Login />} />
-            <Route path='/register/user' element={<Register />} />
-            <Route path='/register/client' element={<Register client/>} />
+            <Route path="/client/login" element={< Login client/>} />
+            <Route path="/user/login" element={< Login />} />
+            <Route path='/user/register' element={<Register />} />
+            <Route path='/client/register' element={<Register client/>} />
             <Route path='/register/gymdetails' element={<GymDetails/>} />
             <Route path='/Detail/type/:cat/:id' element={<ProductDetail />} />
-            <Route path='gyms/:location' element={<SingleCategory />} />
+            <Route path='gyms/:location' element={<SingleLocation />} />
             <Route path='/cart' element={<Cart />} />
             <Route path='/wishlist' element={<Wishlist />} />
             <Route path='/checkout' element={<CheckoutForm />} />
@@ -51,13 +48,17 @@ function App() {
             <Route path='/paymentsuccess' element={<PaymentSuccess />} />
             <Route path='/forgotpassword' element={<ForgotPasswordForm />} />
             <Route path='/user/reset/:id/:token' element={<AddNewPassword />} />
-            <Route path='/redirect' element={<Redirect />} />
+
+            
+            {/* Client Routes */}
+            <Route path='/dashboard' element={<DashBoard />} />
+
 
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={< AdminLogin />} />
             <Route path='/admin/register' element={<AdminRegister />} />
-            <Route path='/admin/home' element={<AdminHomePage />} />
+            <Route path='/admin/home' element={<DashBoard />} />
             <Route path='/admin/home/user/:id' element={<SingleUserPage />} />
             <Route path='/admin/home/product/:type/:id' element={<SingleProduct />} />
           </Routes>

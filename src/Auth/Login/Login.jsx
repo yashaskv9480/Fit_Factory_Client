@@ -17,7 +17,7 @@ import Cookies from 'js-cookie'
 import { useAuth } from '../useAuth/useAuth'
 
 
-const Login = () => {
+const Login = ({client}) => {
   const [loading,setloading] = useState(false)
   const [credentials, setCredentials] = useState({ email: "", password: "" })
   const [showPassword, setShowPassword] = useState(false);
@@ -42,13 +42,34 @@ const Login = () => {
     setloading(true)
     try {
         const sendAuth = await Fit_Factory_api.post(`/user/login` ,{email: credentials.email, password: credentials.password });
-        console.log(sendAuth)
         const receive = await sendAuth.data
-        console.log(receive)
         if (sendAuth.status == 200) {
           toast.success("Login Successfully", { autoClose: 500, theme: 'colored' })
           Cookies.set("Authorization",receive.token,{expires: 1})
-          navigate('/redirect')
+          navigate('/')
+        }
+      }
+    catch (error) {
+      setloading(false)
+        if(error.response.status == 404){
+          toast.error("Wrong Email and Password! Please Contact Admin")
+        }
+        else{
+          toast.error("Somthing went wrong! Please try again later")
+        }
+    }
+  }
+
+  const handleClientsubmit = async (e) => {
+    e.preventDefault()
+    setloading(true)
+    try {
+        const sendAuth = await Fit_Factory_api.post(`/user/login` ,{email: credentials.email, password: credentials.password });
+        const receive = await sendAuth.data
+        if (sendAuth.status == 200) {
+          toast.success("Login Successfully", { autoClose: 500, theme: 'colored' })
+          Cookies.set("Authorization",receive.token,{expires: 1})
+          navigate('/dashboard')
         }
       }
     catch (error) {
@@ -72,9 +93,10 @@ const Login = () => {
       const receive = sendAuth.data;
       if (sendAuth.status == 200){
         Cookies.set("Authorization",receive.token,{expires: 1})
-        navigate("/redirect")
+        navigate("/")
       }
     }
+  
     catch(err){
       setloading(false)
       toast.error("Login Error! Please Contact the admin")
@@ -111,7 +133,7 @@ const Login = () => {
         <Typography component="h1" variant="h5" sx={{mb: 2}}>
           Sign in
         </Typography>
-        <GoogleOAuthProvider clientId = {process.env.REACT_APP_GOOGLE_CLIENT_ID} >
+{ !client &&       <GoogleOAuthProvider clientId = {process.env.REACT_APP_GOOGLE_CLIENT_ID} >
             <GoogleLogin
                 onSuccess={handleGoogleSucess}
                 onError={handleGoogleFailure}
@@ -120,8 +142,8 @@ const Login = () => {
                 shape='circle'
                 width="400"
                 />
-              </GoogleOAuthProvider> 
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+              </GoogleOAuthProvider> }
+        <Box component="form" onSubmit= {client ? handleClientsubmit : handleSubmit} noValidate sx={{ mt: 1 }}>
 
           <TextField
             margin="normal"

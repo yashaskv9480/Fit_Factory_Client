@@ -20,6 +20,7 @@ export const useAuth = () => {
         else if(role == 'user'){
             isUser = true;
         }
+        console.log()
         return {name,isAdmin,isClient,isUser,token}
     }
     return null

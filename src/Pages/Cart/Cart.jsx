@@ -15,7 +15,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AiFillCloseCircle, AiOutlineLogin } from 'react-icons/ai'
 import CartCard from '../../Components/Card/CartCard/CartCard';
-import ProductCard from '../../Components/Card/Product Card/ProductCard';
+import ProductCard from '../../Components/Card/GymCard/GymCard';
 import './Cart.css'
 import OrderSummary from './OrderSummary';
 import { EmptyCart } from '../../Assets/Images/Image';
