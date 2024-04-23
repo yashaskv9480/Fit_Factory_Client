@@ -22,6 +22,7 @@ import SingleUserPage from './Admin/Pages/SingleUserPage';
 import SingleProduct from './Admin/Pages/SingleProduct';
 import GymDetails from './Auth/Gym Details/GymDetails';
 import SingleLocation from './SingleLocation/SingleLocation';
+import { GymImages } from './Pages/GymImages/GymImages';
 
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
             <Route path='/paymentsuccess' element={<PaymentSuccess />} />
             <Route path='/forgotpassword' element={<ForgotPasswordForm />} />
             <Route path='/user/reset/:id/:token' element={<AddNewPassword />} />
+            <Route path='/gymimages/update' element={<GymImages />} />
 
             
             {/* Client Routes */}

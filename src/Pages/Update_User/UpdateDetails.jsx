@@ -11,9 +11,12 @@ import { TiArrowBackOutline } from 'react-icons/ti';
 
 import { Transition } from '../../Constants/Constant'
 import CopyRight from '../../Components/CopyRight/CopyRight'
+import { useAuth } from '../../Auth/useAuth/useAuth'
+import EditIcon from '@mui/icons-material/Edit';
 
 
 const UpdateDetails = () => {
+    const {isClient, isUser} = useAuth();
     const [userData, setUserData] = useState([])
     const [openAlert, setOpenAlert] = useState(false);
     let authToken = localStorage.getItem('Authorization')
@@ -38,9 +41,10 @@ const UpdateDetails = () => {
         setShowPassword(!showPassword);
     };
     let navigate = useNavigate()
-    useEffect(() => {
-        setProceed ? getUserData() : navigate('/')
-    }, [])
+    // useEffect(() => {
+    //     setProceed ? getUserData() : navigate('/')
+    // }, [])
+
     const getUserData = async () => {
         try {
             const { data } = await axios.get(`${process.env.REACT_APP_GET_USER_DETAILS}`, {
@@ -173,7 +177,9 @@ const UpdateDetails = () => {
     return (
         <>
             <Container sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginBottom: 10 }}>
-                <Typography variant='h6' sx={{ margin: '30px 0', fontWeight: 'bold', color: '#1976d2' }}>Personal Information</Typography>
+            <Button variant='contained' endIcon={<EditIcon />} onClick={()=>navigate('/gymimages/update')} >Edit Gym Images</Button>
+                <Typography variant='h6' sx={{ margin: '30px 0', fontWeight: 'bold', color: '#1976d2' }}>{isClient ? "Gym Information" :  "Personal Information"}</Typography>
+            
                 <form noValidate autoComplete="off" className={styles.checkout_form} onSubmit={handleSubmit} >
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
