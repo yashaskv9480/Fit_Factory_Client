@@ -16,11 +16,7 @@ import { useAuth } from '../Auth/useAuth/useAuth'
 const DesktopNavigation = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [proceed,setProceed] = useState(false)
-  const auth = useAuth();
-  const token = auth ?  auth.token : null
-  const isClient = auth ? auth.isClient : null
-  const isUser = auth ? auth.isUser : null
-  const isAdmin = auth ? auth.isAdmin : null
+  const {isauthenticated,isClient,isUser,isAdmin,checkLoggedOut} = useAuth();
   const open = Boolean(anchorEl);
   const { cart, setCart, wishlistData, setWishlistData } = useContext(ContextFunction)
   const [openAlert, setOpenAlert] = useState(false);
@@ -35,12 +31,12 @@ const DesktopNavigation = () => {
   };
 
 
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     if (setProceed) {
-        Cookies.remove('Authorization')
+        await checkLoggedOut();
         toast.success("Logout Successfully", { autoClose: 500, theme: 'colored' })
         navigate('/')
-        window.location.reload()
+        // window.location.reload()
         setOpenAlert(false)
     }
     else {
@@ -79,7 +75,7 @@ const DesktopNavigation = () => {
             </li> */}
 
             {
-              token ?
+              isauthenticated ?
                 <>
                 { isUser &&
                   <li className="nav-links">

@@ -16,20 +16,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* border: 2px solid red; */
     flex-direction: column;
 }
 
 .cart_box {
     height: 250px;
     width: 250px;
-    /* padding: 5px; */
-    /* border: 2px solid black; */
-    margin: auto;
 }
 
 .cart_img {
-    height: 100%;
     width: 100%;
     object-fit: contain;
     object-position: center;
@@ -39,13 +34,11 @@
     .main_card {
         width: 250px;
         height: 350px;
-        padding: 10px;
     }
 
     .cart_box {
         height: 200px;
         width: 200px;
-        padding: 15px;
 
     }
 

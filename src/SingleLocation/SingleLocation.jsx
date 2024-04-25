@@ -16,7 +16,6 @@ const SingleLocation = () => {
     const [filterOption, setFilterOption] = useState('All')
     const [title, setTitle] = useState('All')
     const { location } = useParams()
-    const { cat } = useParams()
 
     useEffect(() => {
         getLocationGyms()
@@ -56,9 +55,9 @@ const SingleLocation = () => {
                     gyms.length == 0 ? 
                      <Typography variant='h3' sx={{ textAlign: 'center', marginTop: 10, color: '#1976d2', fontWeight: 'bold' }}>"No gyms available at the selected location"</Typography>
                   :
-                <Container maxWidth='xl' style={{ marginTop: 10,  justifyContent: 'center', flexWrap: "wrap", paddingBottom: 20, marginBottom: 30}}>
+                <Container maxWidth='xl' style={{ marginTop: 10,display:'flex', justifyContent: 'center', flexWrap: "wrap", paddingBottom: 20, marginBottom: 30}}>
                     {gyms.map(gym => (
-                        <Link to={`/Detail/type/${cat}/${gym.gym_id}`} key={gym.gym_id} sx={{marginBottom: 2}}>
+                        <Link to={`/gyms/${location}/${gym.gym_id}`} key={gym.gym_id} sx={{marginBottom: 2}}>
                             <GymCard gym={gym} />
                         </Link>
                     ))}

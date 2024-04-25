@@ -45,3 +45,12 @@ The backend of the application is built with NodeJS and ExpressJS and uses a Mon
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+
+
+
+Unauthorized user
+            setloading(false)
+            toast.error("Unauthorized User", {autoClose: 500})
+            await checkLoggedOut(); 
+            navigate('/login')

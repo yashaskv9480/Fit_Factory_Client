@@ -13,12 +13,14 @@ import Fit_Factory_api from '../../Fit_Factory_Api/Fit_Factory_api'
 import {GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import {CircularProgress} from '@mui/material'
 import Cookies from 'js-cookie'
+import { useAuth } from '../useAuth/useAuth'
 
 
 
 
 const Register = ({client}) => {
   const [loading,setloading] = useState(false)
+  const {checkLoggedIn} = useAuth();
   const [credentials, setCredentials] = useState({ name: "", email: "", mobile: '', password: "" })
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -89,7 +91,8 @@ const Register = ({client}) => {
       if (sendAuth.status == 200){
         toast.success("Login succesful")
         Cookies.set("Authorization",receive.token,{expires: 1})
-        navigate("/redirect")
+        await checkLoggedIn();
+        navigate("/")
       }
     }
     catch(err){

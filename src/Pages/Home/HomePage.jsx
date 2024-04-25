@@ -15,27 +15,25 @@ import { useAuth } from '../../Auth/useAuth/useAuth'
 
 
 const HomePage = () => {
-    const { setCart } = useContext(ContextFunction)
-    let authToken = localStorage.getItem('Authorization')
-    let auth = useAuth()
-    const isUser = auth ? (auth.isUser ? true : null) : null;
+    const {isUser} = useAuth();
+    console.log(isUser)
 
-    useEffect(() => {
-        getCart()
-        window.scroll(0, 0)
-    }, [])
-    const getCart = async () => {
-        if (authToken !== null) {
-            const { data } = await axios.get(`${process.env.REACT_APP_GET_CART}`,
-                {
-                    headers: {
-                        'Authorization': authToken
-                    }
-                })
-            setCart(data);
-        }
+    // useEffect(() => {
+    //     getCart()
+    //     window.scroll(0, 0)
+    // }, [])
+    // const getCart = async () => {
+    //     if (authToken !== null) {
+    //         const { data } = await axios.get(`${process.env.REACT_APP_GET_CART}`,
+    //             {
+    //                 headers: {
+    //                     'Authorization': authToken
+    //                 }
+    //             })
+    //         setCart(data);
+    //     }
 
-    }
+    // }
 
     return (
         <>

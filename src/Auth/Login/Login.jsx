@@ -19,6 +19,7 @@ import { useAuth } from '../useAuth/useAuth'
 
 const Login = ({client}) => {
   const [loading,setloading] = useState(false)
+  const {checkLoggedIn} = useAuth();
   const [credentials, setCredentials] = useState({ email: "", password: "" })
   const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => {
@@ -51,8 +52,8 @@ const Login = ({client}) => {
       }
     catch (error) {
       setloading(false)
-        if(error.response.status == 404){
-          toast.error("Wrong Email and Password! Please Contact Admin")
+        if(error.response.status === 401){
+          toast.error("Unauthorized User")
         }
         else{
           toast.error("Somthing went wrong! Please try again later")
@@ -63,12 +64,14 @@ const Login = ({client}) => {
   const handleClientsubmit = async (e) => {
     e.preventDefault()
     setloading(true)
-    try {
+    try
+     {
         const sendAuth = await Fit_Factory_api.post(`/user/login` ,{email: credentials.email, password: credentials.password });
         const receive = await sendAuth.data
         if (sendAuth.status == 200) {
           toast.success("Login Successfully", { autoClose: 500, theme: 'colored' })
           Cookies.set("Authorization",receive.token,{expires: 1})
+          await checkLoggedIn();
           navigate('/dashboard')
         }
       }
@@ -94,7 +97,7 @@ const Login = ({client}) => {
       if (sendAuth.status == 200){
         Cookies.set("Authorization",receive.token,{expires: 1})
         navigate("/")
-      }
+      } 
     }
   
     catch(err){

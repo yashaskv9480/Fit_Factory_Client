@@ -1,61 +1,177 @@
-import React, { useEffect, useState } from 'react'
-import { ImageList,ImageListItem } from '@mui/material'
-import Fit_Factory_api from '../../Fit_Factory_Api/Fit_Factory_api'
-import { useAuth } from '../../Auth/useAuth/useAuth'
-import { toast } from 'react-toastify'
-import { Navigate, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Grid, Card, CardMedia, CardActions, IconButton, Typography, Button,Box } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Fit_Factory_api from '../../Fit_Factory_Api/Fit_Factory_api';
+import { useAuth } from '../../Auth/useAuth/useAuth';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import {Skeleton} from '@mui/material';
 
 export const GymImages = () => {
-    const [images,setImages] = useState(" ")
-    const {token} = useAuth();
+    const [images, setImages] = useState([]);
+    const [newimage, setNewImage] = useState({ preview: '', data: '' })
+    const {checkLoggedOut} = useAuth()
+    const [loading,setloading] = useState(true)
+    const { token } = useAuth();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log("inside")
-        getGymImages();
-    }, [])
+        useEffect(() => {
+            getGymImages();
+        }, []);
 
     const getGymImages = async () => {
+      setloading(true)
         try {
-            const response  = await Fit_Factory_api.get(`/client/getgymimages`, {
+            const response = await Fit_Factory_api.get(`/client/getgymimages`, {
                 headers: {
                     'Authorization': token
                 }
-            })
-            if(response.status == 200)
-            {
-                console.log(response.data)
+            });
+            if (response.status === 200) {
                 setImages(response.data);
-            }
-            else{
-                toast.error("Something went wrong!! Please Contact admin")
-                navigate("/dashboard")
+                setloading(false)
+            } else {
+                toast.error("Something went wrong!! Please Contact admin");
+                navigate("/dashboard");
             }
         } catch (error) {
-            if(error.response.status == 401){
-                toast.error("Unauthorized User !!")
-                navigate("/unauthorized")
+            if (error.response.status === 401) {
+              
+                toast.error("Unauthorized User !!");
+                navigate("/unauthorized");
             }
-            console.log(error)
-            toast.error("Something went wrong", { autoClose: 500, theme: 'colored' })
-            navigate("/dashboard")
-
+            console.log(error);
+            toast.error("Something went wrong", { autoClose: 500, theme: 'colored' });
+            navigate("/dashboard");
         }
+    };
+
+    const handleFileChange = (e) => {
+      const img = {
+        preview: URL.createObjectURL(e.target.files[0]),
+        data: e.target.files[0],
+      }
+      setNewImage(img)
+    }
+  
+    const handleuploadimage = async () => {
+        if (!newimage.data) {
+            toast.error("No image selected", { autoClose: 2000, theme: 'colored' });
+            return;
+        }    
+        setloading(true)
+        let formData = new FormData()
+        formData.append('image', newimage.data)
+        try {
+            const sendAuth = await fetch('http://localhost:5000/api/client/addgymimage', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': `${token}`
+                }
+            });
+        
+            if (sendAuth.status === 200) {
+              setloading(false)
+              toast.success("Uploaded Successfully", { autoClose: 500, theme: 'colored' })
+            }
+            else {
+              setloading(false)
+              toast.error("Something went wrong, Please try again", { autoClose: 500, theme: 'colored' })
+            }
+        } catch (error) {
+          if(error.response.status === 401){
+            setloading(false)
+            toast.error("Unauthorized User", {autoClose: 500})
+            await checkLoggedOut(); 
+            navigate('/login')
+          }
+          else{
+            setloading(false)
+            toast.error(error.response.data.error[0].msg, { autoClose: 500, theme: 'colored' })
+    
+          }
+        }
+    
     }
 
 
 
-  return (
-{/* <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-  {itemData.map((item) => (
-    <ImageListItem key={item.img}>
-      <img
-        srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-        src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-        alt={item.title}
-        loading="lazy"
-      />
-    </ImageListItem>
-  ))}
-</ImageList>  ) */} )
-}
+
+    const handleDeleteImage = async (imageName) => {
+        try {
+            // Make an API call to delete the image with the provided image name
+            // Example:
+            // const response = await Fit_Factory_api.delete(`/client/deleteimage/${imageName}`, {
+            //     headers: {
+            //         'Authorization': token
+            //     }
+            // });
+            // if (response.status === 200) {
+            //     // Remove the deleted image from the state
+            //     setImages(prevImages => prevImages.filter(image => image.image_name !== imageName));
+            //     toast.success("Image deleted successfully");
+            // } else {
+            //     toast.error("Failed to delete image");
+            // }
+        } catch (error) {
+            console.error("Error deleting image:", error);
+            toast.error("Failed to delete image", { autoClose: 2000 });
+        }
+    };
+
+    return (
+        <>
+              <Box display="flex" justifyContent="center" mt={2} mb={4} >
+                <Button variant="contained" color="primary"  onClick={handleuploadimage} >
+                Upload Gym Image
+            </Button>
+             <input
+                  accept='image/*'
+                  type="file"
+                  required
+                  id = "gymimage"
+                  name = "gymimage"
+                  onChange={handleFileChange}
+                />            
+            </Box>
+            {loading ? (
+                  <section style={{ display: 'flex', flexWrap: "wrap", width: "100%", justifyContent: "space-around", alignItems: 'center' }}>
+                      <Skeleton variant='rectangular' height={200} width="200px" />
+                      <Skeleton variant='rectangular' height={200} width="200px" />
+                      <Skeleton variant='rectangular' height={200} width="200px" />
+                      <Skeleton variant='rectangular' height={200} width="200px" />
+
+                  </section>
+                ) : (
+            <Grid container spacing={2} m={2}>
+                {images.map((image) => (
+                    <Grid item xs={12} sm={6} md={4} key={image.image_name}>
+                        <Card>
+                            <CardMedia
+                                component="img"
+                                height="200"
+                                image={image.image_url}
+                                alt={image.image_name}
+                            />
+                            <CardActions>
+                                <IconButton
+                                    aria-label="delete"
+                                    onClick={() => handleDeleteImage(image.image_name)}
+                                    style={{color: "red"}}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                                <Typography variant="body2" color="textSecondary">
+                                    {image.image_name}
+                                </Typography>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid> )}
+        </>
+    );
+};
+
+export default GymImages;
