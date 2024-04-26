@@ -50,7 +50,6 @@ const Register = ({client}) => {
             mobile: credentials.mobile,
             password: credentials.password,
           })
-        console.log(sendAuth.status)
         if (sendAuth.status == 200) {
           toast.success("Registered Successfully", { autoClose: 500, theme: 'colored' })
           navigate('/login')
@@ -87,7 +86,6 @@ const Register = ({client}) => {
         credential,clientId
       })
       const receive = sendAuth.data;
-      console.log(receive)
       if (sendAuth.status == 200){
         toast.success("Login succesful")
         Cookies.set("Authorization",receive.token,{expires: 1})

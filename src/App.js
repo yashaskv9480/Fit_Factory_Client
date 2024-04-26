@@ -45,7 +45,7 @@ function App() {
               <Route path='/user/register' element={<Register />} />
               <Route path='/client/register' element={<Register client />} />
               <Route path='/register/gymdetails' element={<GymDetails />} />
-              <Route path='/gyms/:location/:id' element={<ProductDetail />} />
+              <Route path='/gyms/:location/:gym_id' element={<ProductDetail />} />
               <Route path='gyms/:location' element={<SingleLocation />} />
               <Route path='/cart' element={<Cart />} />
               <Route path='/wishlist' element={<Wishlist />} />

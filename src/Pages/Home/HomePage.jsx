@@ -16,7 +16,6 @@ import { useAuth } from '../../Auth/useAuth/useAuth'
 
 const HomePage = () => {
     const {isUser} = useAuth();
-    console.log(isUser)
 
     // useEffect(() => {
     //     getCart()

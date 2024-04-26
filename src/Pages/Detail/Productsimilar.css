@@ -3,11 +3,7 @@
 }
 
 .main-content {
-    display: flex;
     justify-content: space-around;
-    /* align-items: center; */
-    /* background-color: red; */
-    width: 90%;
     flex-wrap: wrap;
 }
 

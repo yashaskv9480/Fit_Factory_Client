@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import styles from './ProductCard.module.css';
 
 export default function GymCard({ gym }) {
-    console.log(gym);
     return (
         <Card className={styles.main_card}>
             <CardActionArea className={styles.card_action}>
