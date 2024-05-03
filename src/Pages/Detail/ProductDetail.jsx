@@ -37,6 +37,10 @@ import { StaticDateRangePicker } from '@mui/x-date-pickers-pro/StaticDateRangePi
 import { pickersLayoutClasses } from '@mui/x-date-pickers/PickersLayout';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useAuth } from '../../Auth/useAuth/useAuth';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import DialogTitle from '@mui/material/DialogTitle';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 
 
 
@@ -44,14 +48,16 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const ProductDetail = () => {
     const { cart, setCart, wishlistData, setWishlistData } = useContext(ContextFunction)
+    const { isauthenticated } = useAuth();
     const [openAlert, setOpenAlert] = useState(false);
     const { location, gym_id } = useParams()
     const [gymImages,setGymImages] = useState([])
-    const [gymDetails,setGymDetails] = useState([])
+    const [gymDetails,setGymDetails] = useState()
     const [productQuantity, setProductQuantity] = useState(1)
     const [loading, setLoading] = useState(true);
-    const [selecteddate,setSelectedDate] = useState(undefined)
-    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+    const [selecteddate, setSelectedDate] = useState([null,null])
+    const [openDialog, setOpenDialog] = useState(false);
+
 
 
 
@@ -78,6 +84,7 @@ const ProductDetail = () => {
 
         }
     }
+
 
 
     // const addToWhishList = async (product) => {
@@ -126,26 +133,32 @@ const ProductDetail = () => {
         setSelectedDate(event.target.value);
     };
 
+    const handleButtonClickAndOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
     const handleBooking = () => {
 
     }
 
+    const handleClose = () => {
+        setOpenDialog(false);
+    };
+
     const handleDateAccept = () => {
-        setIsDatePickerOpen(false);
+        // console.log(selecteddate)
     };
 
     const handleDateCancel = () => {
-        setIsDatePickerOpen(false);
-    };
-    const handleButtonClick = () => {
-        setIsDatePickerOpen(true);
+        console.log(selecteddate)
+        setOpenDialog(false)
     };
 
     function Item({item})
 {
     return (
         <Paper>
-<img src={item.image_url} alt={item.image_name} height={"550px"} width={"90%"}/>
+<img src={item.image_url} alt={item.image_name} height={"550px"} width={"75%"} style={{ display: 'block', margin: '0 auto' }}/>
         </Paper>
     )
 }
@@ -175,7 +188,7 @@ const ProductDetail = () => {
                     {loading ? (
                         <Skeleton variant='rectangular' height={400} />
                     ) : (
-                        <Carousel>
+                    <Carousel>
                         {
                             gymImages.map( image => <Item key={image.image_name} item={image} /> )
                         }
@@ -197,70 +210,58 @@ const ProductDetail = () => {
                                 border: '1px solid #ccc', 
                                 padding: '20px', 
                                 borderRadius: '8px',
-                                width: '90%',  // Adjust the width of the box as needed
-                                margin: '0 auto',  // Center the box horizontally
+                                width: '100%',  // Adjust the width of the box as needed
+                                marginTop: "40px",  // Center the box horizontally
                             }}>
                                 {/* Left side */}
                                 <Box sx={{ width: '48%', paddingRight: '20px' }}>
-                                    <Typography variant="h4" gutterBottom>
-                                        Gym Details
-                                    </Typography>
-                                    <Typography variant="body1" gutterBottom>
-                                        Gym Name: ABC Gym
-                                    </Typography>
-                                    <Typography variant="body1" gutterBottom>
-                                        Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                    </Typography>
-                                    <Typography variant="body1" gutterBottom>
-                                        Location: XYZ Street, City
-                                    </Typography>
-                                    <Typography variant="body1" gutterBottom>
-                                        Timings: 8:00 AM - 10:00 PM
-                                    </Typography>
-                                    <Typography variant="body1" gutterBottom>
-                                        Address: 123 Main St, City
-                                    </Typography>
-                                    <Typography variant="h4" gutterBottom>
-                                        Gym Price
-                                    </Typography>
-                                    <Typography variant="body1" gutterBottom>
-                                        $50 per month
-                                    </Typography>
+                                <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'darkblue', textTransform: 'uppercase', marginBottom: '10px' }} gutterBottom>
+                                {gymDetails[0].gym_name}
+                            </Typography>
+                            <Typography variant="body1" sx={{ marginBottom: '10px' }} gutterBottom>
+                                {gymDetails[0].description != null && `Description: ${gymDetails[0].description}`}
+                            </Typography>
+                            <Typography variant="body1" sx={{ marginBottom: '10px' }} gutterBottom>
+                                {gymDetails[0].timings != null && `Timings: ${gymDetails[0].timings}`}
+                            </Typography>
+                            <Typography variant="body1" sx={{ marginBottom: '10px' }} gutterBottom>
+                                {gymDetails[0].address != null && `Address: ${gymDetails[0].address}`}
+                            </Typography>
+                            <Typography variant="h4" sx={{ marginBottom: '10px' }} gutterBottom>
+                                <CurrencyRupeeIcon/>{gymDetails[0].gym_price}
+                            </Typography>
                                 </Box>
-                    
-                                {/* Right side */}
-                                <Box sx={{ width: '52%', paddingLeft: '20px' }}>
-
+                    { isauthenticated && 
+                            <Box sx={{ width: '25%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <React.Fragment>
-            <Button variant="outlined" onClick={handleButtonClick}>
-                Select Dates
-            </Button>
-
-            {isDatePickerOpen && (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <StaticDateRangePicker
-                        value={selecteddate}
-                        displayStaticWrapperAs="mobile"
-                        onChange={handleDateChange}
-                        onAccept={handleDateAccept}
-                        onCancel={handleDateCancel}
-                        renderInput={() => null} // Hide the input field
-                    />
-                </LocalizationProvider>
-            )}
-
-            {selecteddate && (
-                <div>
-                    Selected Dates: {selecteddate[0].toLocaleDateString()} to {selecteddate[1].toLocaleDateString()}
-                </div>
-            )}
-        </React.Fragment>
-                    
-                                    {/* Book Button */}
-                                    <Button variant="contained" onClick={handleBooking}>
-                                        Book
+                                    <Button variant="outlined" onClick={handleButtonClickAndOpenDialog} sx={{ marginBottom: '20px' }}>
+                                        Select Dates
                                     </Button>
-                                </Box>
+                                    <Dialog onClose={handleClose} open={openDialog}>
+                                        <DialogTitle>Select Dates</DialogTitle>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <StaticDateRangePicker
+                                                value={selecteddate}
+                                                displayStaticWrapperAs="mobile"
+                                                onChange={(newValue) => {
+                                                    setSelectedDate(newValue);
+                                                }}
+                                                onAccept={handleDateAccept}
+                                                onClose={handleDateCancel}
+                                                renderInput={() => null} // Hide the input field
+                                            />
+                                        </LocalizationProvider>
+                                    </Dialog>
+                                    {/* Typography component */}
+                                    <Typography variant="body1" gutterBottom sx={{ marginBottom: '20px' }}>
+                                            {/* {selecteddate != null && selecteddate}           */}
+                                    </Typography>
+                                </React.Fragment>
+                                {/* Book Button */}
+                                <Button variant="contained" onClick={handleBooking}>
+                                    Book
+                                </Button>
+                            </Box> }
                             </Box>
                         )
                     )}
