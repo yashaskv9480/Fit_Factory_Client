@@ -46,6 +46,7 @@ import { useAuth } from "../../Auth/useAuth/useAuth";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import DialogTitle from "@mui/material/DialogTitle";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import Cookies from "js-cookie";
 
 const ProductDetail = () => {
   const { cart, setCart, wishlistData, setWishlistData } =
@@ -62,8 +63,8 @@ const ProductDetail = () => {
   const [formattedEndDate, setFormattedEndDate] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [bookingDates, setBookingDates] = useState([]);
-  const { token } = useAuth();
   const navigate = useNavigate();
+  const token = Cookies.get("Authorization")
 
   let authToken = localStorage.getItem("Authorization");
   let setProceed = authToken ? true : false;
@@ -135,7 +136,7 @@ const ProductDetail = () => {
   };
 
   const handleBooking = async () => {
-    setLoading(true)
+    setLoading(true);
     const data = {
       bookingDates,
       gym_id: gymDetails[0].gym_id,
@@ -153,19 +154,19 @@ const ProductDetail = () => {
       );
 
       if (bookingResponse.status === 200) {
-        setLoading(false)
-        toast.success("Successfully booked. Happy Workout" );
-        navigate('/')
-        
+        setLoading(false);
+        toast.success("Successfully booked. Happy Workout");
+        navigate("/");
       } else {
         toast.error("Booking failed");
       }
     } catch (err) {
-      setLoading(false)
-      if(err.response.status == 400){
-        toast.error("You have already booked the particular gym for these Dates !!!")
-      }
-      else{
+      setLoading(false);
+      if (err.response.status == 400) {
+        toast.error(
+          "You have already booked the particular gym for these Dates !!!"
+        );
+      } else {
         console.error(err);
         toast.error("Booking failed. Plaese Contact admin");
       }
@@ -285,6 +286,10 @@ const ProductDetail = () => {
         <main className="main-content">
           {loading ? (
             <Skeleton variant="rectangular" height={400} />
+          ) :  gymImages.length == 0 ? (
+            <Typography sx={{ textAlign: "center" }}>
+              No images have been uploaded by Owner
+            </Typography>
           ) : (
             <Carousel>
               {gymImages.map((image) => (
@@ -305,11 +310,7 @@ const ProductDetail = () => {
               <Skeleton variant="rectangular" height={200} width="200px" />
               <Skeleton variant="text" height={400} width={700} />
             </section>
-          ) : gymImages.length == 0 ? (
-            <Typography sx={{ textAlign: "center" }}>
-              No images have been uploaded by Owner
-            </Typography>
-          ) : (
+          ): (
             <Box
               sx={{
                 display: "flex",
@@ -320,7 +321,7 @@ const ProductDetail = () => {
                 borderRadius: "8px",
                 width: "100%",
                 marginTop: "40px",
-                marginBottom: "50px"
+                marginBottom: "50px",
               }}
             >
               {/* Left side */}
@@ -392,7 +393,7 @@ const ProductDetail = () => {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <StaticDateRangePicker
                           value={selecteddate}
-                          disablePast = "true"
+                          disablePast="true"
                           displayStaticWrapperAs="mobile"
                           onChange={(newValue) => {
                             setSelectedDate(newValue);

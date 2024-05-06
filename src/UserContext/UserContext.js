@@ -16,12 +16,12 @@ export const UserProvider = ({ children }) => {
 
 	    const checkLoggedIn = async () => {
             const token = Cookies.get('Authorization')
-            console.log(Cookies.get('Authorization'))
             setToken(token)
                 if(token){
         setIsauthenticated(true)
         const decoded = jwtDecode(token)
         const {name,role} = decoded;
+        console.log(role)
         if(role == 'client'){
             setIsClient(true)
         }
@@ -33,6 +33,7 @@ export const UserProvider = ({ children }) => {
         }       
         }
 		};
+
 
         const checkLoggedOut = async () => {
             Cookies.remove("Authorization")

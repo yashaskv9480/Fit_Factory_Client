@@ -7,15 +7,13 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton,
-  Collapse,
-  Typography,
+  Container,
+  InputAdornment,
+  TextField,
 } from "@mui/material";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { Link } from "react-router-dom";
 import CurrencyRupee from "@mui/icons-material/CurrencyRupee";
 
-const OrderTable = ({ bookings }) => {
+const BookingTable = ({ bookings }) => {
   return (
     <>
       <Paper
@@ -32,10 +30,13 @@ const OrderTable = ({ bookings }) => {
                   Customer Name
                 </TableCell>
                 <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
-                  Booking Date
+                  Gym Name
                 </TableCell>
                 <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
-                   Amount
+                  Date
+                </TableCell>
+                <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
+                  Price{" "}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -44,10 +45,14 @@ const OrderTable = ({ bookings }) => {
                 <React.Fragment key={booking.booking_id}>
                   <TableRow>
                     <TableCell component="th" scope="row">
-                      {booking.name}
+                      {booking.name.toUpperCase()}
                     </TableCell>
+                    <TableCell>{booking.gym_name.toUpperCase()}</TableCell>
                     <TableCell>{new Date(booking.booking_date).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}</TableCell>
-                    <TableCell><CurrencyRupee style={{fontSize: "18px"}}/>{booking.amount}</TableCell>
+                    <TableCell>
+                      <CurrencyRupee style={{ fontSize: "16px" }} />
+                      {booking.amount}
+                    </TableCell>
                   </TableRow>
                 </React.Fragment>
               ))}
@@ -59,4 +64,4 @@ const OrderTable = ({ bookings }) => {
   );
 };
 
-export default OrderTable;
+export default BookingTable;

@@ -7,15 +7,13 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton,
-  Collapse,
-  Typography,
+  Container,
+  InputAdornment,
+  TextField,
 } from "@mui/material";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { Link } from "react-router-dom";
 import CurrencyRupee from "@mui/icons-material/CurrencyRupee";
 
-const OrderTable = ({ bookings }) => {
+const GymTable = ({ gyms }) => {
   return (
     <>
       <Paper
@@ -29,25 +27,40 @@ const OrderTable = ({ bookings }) => {
             <TableHead sx={{ position: "sticky", top: 0 }}>
               <TableRow>
                 <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
-                  Customer Name
+                  Owner Name
                 </TableCell>
                 <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
-                  Booking Date
+                  Email
                 </TableCell>
                 <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
-                   Amount
+                  Mobile
+                </TableCell>
+                <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
+                  Gym Name
+                </TableCell>
+                <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
+                  Location
+                </TableCell>
+                <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
+                  Gym Price
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {bookings.map((booking) => (
-                <React.Fragment key={booking.booking_id}>
+              {gyms.map((gym) => (
+                <React.Fragment key={gym.gym_id}>
                   <TableRow>
                     <TableCell component="th" scope="row">
-                      {booking.name}
+                      {gym.name.toUpperCase()}
                     </TableCell>
-                    <TableCell>{new Date(booking.booking_date).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}</TableCell>
-                    <TableCell><CurrencyRupee style={{fontSize: "18px"}}/>{booking.amount}</TableCell>
+                    <TableCell>{gym.email}</TableCell>
+                    <TableCell>{gym.mobile}</TableCell>
+                    <TableCell>{gym.gym_name.toUpperCase()}</TableCell>
+                    <TableCell>{gym.location.toUpperCase()}</TableCell>
+                    <TableCell>
+                      <CurrencyRupee style={{ fontSize: "16px" }} />
+                      {gym.gym_price}
+                    </TableCell>
                   </TableRow>
                 </React.Fragment>
               ))}
@@ -59,4 +72,4 @@ const OrderTable = ({ bookings }) => {
   );
 };
 
-export default OrderTable;
+export default GymTable;

@@ -73,6 +73,7 @@ export const GymImages = () => {
         
             if (sendAuth.status === 200) {
               setloading(false)
+              getGymImages()
               toast.success("Uploaded Successfully", { autoClose: 500, theme: 'colored' })
             }
             else {
@@ -100,21 +101,22 @@ export const GymImages = () => {
 
     const handleDeleteImage = async (imageName) => {
         try {
-            // Make an API call to delete the image with the provided image name
-            // Example:
-            // const response = await Fit_Factory_api.delete(`/client/deleteimage/${imageName}`, {
-            //     headers: {
-            //         'Authorization': token
-            //     }
-            // });
-            // if (response.status === 200) {
-            //     // Remove the deleted image from the state
-            //     setImages(prevImages => prevImages.filter(image => image.image_name !== imageName));
-            //     toast.success("Image deleted successfully");
-            // } else {
-            //     toast.error("Failed to delete image");
-            // }
+            setloading(true)
+            const response = await Fit_Factory_api.delete(`/client/deletegymimages/${imageName}`, {
+                headers: {
+                    'Authorization': token
+                }
+            });
+            if (response.status === 200) {
+                setloading(false)
+                setImages(prevImages => prevImages.filter(image => image.image_name !== imageName));
+                toast.success("Image deleted successfully");
+            } else {
+                setloading(false)
+                toast.error("Failed to delete image");
+            }
         } catch (error) {
+            setloading(false)
             console.error("Error deleting image:", error);
             toast.error("Failed to delete image", { autoClose: 2000 });
         }
@@ -143,7 +145,11 @@ export const GymImages = () => {
                       <Skeleton variant='rectangular' height={200} width="200px" />
 
                   </section>
-                ) : (
+                ) :  images.length == 0 ? (
+                    <Typography sx={{ textAlign: "center" }}>
+                      No images have been uploaded
+                    </Typography>
+                  ) :(
             <Grid container spacing={2} m={2}>
                 {images.map((image) => (
                     <Grid item xs={12} sm={6} md={4} key={image.image_name}>

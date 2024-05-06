@@ -13,6 +13,10 @@ import { TbReportMoney } from "react-icons/tb";
 import OrderTable from "./Tables/OrderTable";
 import Widget from "./Widget";
 import { useAuth } from "../../Auth/useAuth/useAuth";
+import Fit_Factory_api from "../../Fit_Factory_Api/Fit_Factory_api";
+import Cookies from "js-cookie";
+import GymTable from "./Tables/GymTable";
+import BookingTable from "./Tables/BookingTable";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,28 +51,82 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs({ user, setUser, getUser }) {
+export default function BasicTabs() {
   const { isClient, isAdmin } = useAuth();
   const [value, setValue] = useState(0);
   const [products, setProducts] = useState([]);
-  const [review, setReview] = useState([]);
-  const [cart, setCart] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
-  const [paymentData, setPaymentData] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [clients,setClients] = useState([]);
+  const [allBookings,setAllBookings] = useState([]);
+  const token = Cookies.get("Authorization");
 
   useEffect(() => {
-    getProductInfo();
+    getBookings();
+    getUsers();
+    getClients();
+    getAllBookings();
   }, []);
-  const getProductInfo = async () => {
+
+  const getBookings = async () => {
     try {
-      const { data } = await axios.get(
-        process.env.REACT_APP_ADMIN_GET_CHART_DATA
+      const bookingResponse = await Fit_Factory_api.get(
+        "/client/bookingdetails",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
-      setProducts(data.product);
-      setReview(data.review);
-      setCart(data.cart);
-      setWishlist(data.wishlist);
-      setPaymentData(data.payment);
+      if (bookingResponse.status == 200) {
+        console.log(bookingResponse.data);
+        setBookings(bookingResponse.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUsers = async () => {
+    try {
+      const usersResponse = await Fit_Factory_api.get("/admin/viewusers", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      if (usersResponse.status == 200) {
+        console.log(usersResponse.data);
+        setUsers(usersResponse.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getClients = async () => {
+    try {
+      const clientResponse = await Fit_Factory_api.get("/admin/viewclients", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      if (clientResponse.status == 200) {
+        setClients(clientResponse.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllBookings = async () => {
+    try {
+      const allbookingresponse = await Fit_Factory_api.get("/admin/viewallbookings", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      if (allbookingresponse.status == 200) {
+        setAllBookings(allbookingresponse.data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -78,10 +136,14 @@ export default function BasicTabs({ user, setUser, getUser }) {
     setValue(newValue);
   };
 
-  const totalRevenue = paymentData.reduce(
-    (acc, curr) => acc + curr.totalAmount,
-    0
-  );
+  const totalClientRevenue = bookings.reduce((total, booking) => {
+    return total + booking.amount;
+  }, 0);
+
+  const totalRevenue = allBookings.reduce((total, booking) => {
+    return total + booking.amount;
+  }, 0);
+
   const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   return (
@@ -95,7 +157,7 @@ export default function BasicTabs({ user, setUser, getUser }) {
         >
           <Grid item xs={12} sm={6} md={6} lg={3}>
             <Widget
-              numbers={totalRevenue}
+              numbers={bookings.length}
               heading="Total Bookings"
               color="#9932CC"
               icon={<TbReportMoney />}
@@ -103,8 +165,16 @@ export default function BasicTabs({ user, setUser, getUser }) {
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={3}>
             <Widget
-              numbers={products.length}
+              numbers={totalClientRevenue}
               heading="Total Revenue"
+              color="#FFC300"
+              icon={<AiOutlineShoppingCart />}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={3}>
+            <Widget
+              numbers={totalClientRevenue * 0.8}
+              heading="Profit"
               color="#FFC300"
               icon={<AiOutlineShoppingCart />}
             />
@@ -120,32 +190,40 @@ export default function BasicTabs({ user, setUser, getUser }) {
         >
           <Grid item xs={12} sm={6} md={6} lg={3}>
             <Widget
-              numbers={totalRevenue}
-              heading="Users"
+              numbers={users.length}
+              heading="Total Users"
               color="#9932CC"
               icon={<TbReportMoney />}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={3}>
             <Widget
-              numbers={products.length}
-              heading="Gyms"
+              numbers={clients.length}
+              heading="Total Gyms"
               color="#FFC300"
               icon={<AiOutlineShoppingCart />}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={3}>
             <Widget
-              numbers={user.length}
-              heading="Bookins"
+              numbers={allBookings.length}
+              heading="Total Bookings"
               color="#FF69B4"
               icon={<CgProfile />}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={3}>
             <Widget
-              numbers={paymentData.length}
-              heading="Revenue"
+              numbers={totalRevenue}
+              heading="Total Revenue"
+              color="#1f77b4  "
+              icon={<FaShippingFast />}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={3}>
+            <Widget
+              numbers={totalRevenue * 0.2}
+              heading="Profit"
               color="#1f77b4  "
               icon={<FaShippingFast />}
             />
@@ -166,47 +244,73 @@ export default function BasicTabs({ user, setUser, getUser }) {
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
-          style={{ overflowX: "a" }}
+          style={{ overflowX: "auto" }}
         >
-          {/* <Tab label={!isSmallScreen && 'Bookings'}  {...a11yProps(0)} iconPosition='start' icon={<VscGraph fontSize={20} />} /> */}
-          <Tab
-            label={!isSmallScreen && "Revenue"}
-            {...a11yProps(1)}
-            iconPosition="start"
-            icon={<CgProfile fontSize={20} />}
-          />
-          <Tab
-            label={!isSmallScreen && "Products"}
-            {...a11yProps(2)}
-            iconPosition="start"
-            icon={<AiOutlineShoppingCart fontSize={20} />}
-          />
-          <Tab
-            label={!isSmallScreen && "Orders"}
-            {...a11yProps(3)}
-            iconPosition="start"
-            icon={<FaShippingFast fontSize={20} />}
-          />
+          {isAdmin && (
+            <Tab
+              label={!isSmallScreen ? "Users" : null}
+              {...a11yProps(0)}
+              iconPosition="start"
+              icon={<VscGraph fontSize={20} />}
+            />
+          )}
+          {isAdmin && (
+            <Tab
+              label={!isSmallScreen ? "Gyms" : null}
+              {...a11yProps(1)}
+              iconPosition="start"
+              icon={<CgProfile fontSize={20} />}
+            />
+          )}
+          {isAdmin && (
+            <Tab
+              label={!isSmallScreen ? "Bookings" : null}
+              {...a11yProps(2)}
+              iconPosition="start"
+              icon={<CgProfile fontSize={20} />}
+            />
+          )}
+          {/* {isAdmin && (
+            <Tab
+              label={!isSmallScreen ? "Products" : null}
+              {...a11yProps(2)}
+              iconPosition="start"
+              icon={<AiOutlineShoppingCart fontSize={20} />}
+            />
+          )} */}
+          {isClient && (
+            <Tab
+              label={!isSmallScreen ? "Bookings" : null}
+              {...a11yProps(3)}
+              iconPosition="start"
+              icon={<FaShippingFast fontSize={20} />}
+            />
+          )}
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
-        <ProductChart
-          products={products}
-          review={review}
-          cart={cart}
-          wishlist={wishlist}
-          paymentData={paymentData}
-          user={user}
-        />
+      {/* <TabPanel value={value} index={isAdmin && 0}>
+        {isAdmin && (
+          <ProductChart
+            // products={products}
+            review={review}
+            cart={cart}
+            wishlist={wishlist}
+            // paymentData={paymentData}
+            user={user}
+          />
+        )}
+      </TabPanel> */}
+      <TabPanel value={value} index={isAdmin && 0}>
+        {isAdmin && <UserTable users={users} />}
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        <UserTable user={user} paymentData={paymentData} getUser={getUser} />
+      <TabPanel value={value} index={isAdmin && 1}>
+        {isAdmin && <GymTable gyms={clients} />}
       </TabPanel>
-      <TabPanel value={value} index={2}>
-        <ProductTable data={products} getProductInfo={getProductInfo} />
+      <TabPanel value={value} index={isAdmin && 2}>
+        {isAdmin && <BookingTable bookings={allBookings} />}
       </TabPanel>
-      <TabPanel value={value} index={3}>
-        <OrderTable orders={paymentData} />
+      <TabPanel value={value} index={isClient && 0}>
+        {isClient && <OrderTable bookings={bookings} />}
       </TabPanel>
     </Box>
   );
