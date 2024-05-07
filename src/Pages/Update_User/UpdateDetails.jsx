@@ -24,38 +24,62 @@ import styles from "./Update.module.css";
 import { toast } from "react-toastify";
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 import { TiArrowBackOutline } from "react-icons/ti";
-
 import { Transition } from "../../Constants/Constant";
 import CopyRight from "../../Components/CopyRight/CopyRight";
 import { useAuth } from "../../Auth/useAuth/useAuth";
 import EditIcon from "@mui/icons-material/Edit";
 import Cookies from "js-cookie";
 import Fit_Factory_api from "../../Fit_Factory_Api/Fit_Factory_api";
+import { Skeleton } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import Modal from "@mui/material/Modal";
 
 const UpdateDetails = () => {
+  const [open, setOpen] = useState(false);
   const { isClient, isUser } = useAuth();
   const [userData, setUserData] = useState([]);
   const [openAlert, setOpenAlert] = useState(false);
   const token = Cookies.get("Authorization");
+  const [loading, setloading] = useState(true);
   const [userDetails, setUserDetails] = useState({
     name: "",
     password: "",
     email: "",
     mobile: "",
   });
+  const [gymDetails, setGymDetails] = useState({
+    gym_name: "",
+    location: "",
+    address: "",
+    timings: "",
+    description: "",
+    gym_price: "",
+    image: "",
+  });
+
   const [password, setPassword] = useState({
     currentPassword: "",
     newPassword: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
   let navigate = useNavigate();
+
   useEffect(() => {
     getUserData();
   }, []);
+
+  const handleAvatarClick = () => {
+    setOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+  };
 
   const getUserData = async () => {
     try {
@@ -68,145 +92,114 @@ const UpdateDetails = () => {
         }
       );
       if (userDetailsResponse.status == 200) {
+        setloading(false);
         userDetails.name = userDetailsResponse.data[0].name;
         userDetails.email = userDetailsResponse.data[0].email;
         userDetails.mobile = userDetailsResponse.data[0].mobile;
         setUserData(userDetailsResponse.data);
       }
     } catch (error) {
+      setloading(false);
       toast.error("Something went wrong", { autoClose: 500, theme: "colored" });
     }
   };
+
   const handleOnchange = (e) => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
+  };
+
+  const handleOnGgymchange = (e) => {
+    setGymDetails({ ...gymDetails, [e.target.name]: e.target.value });
   };
 
   let phoneRegex = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$/;
   let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  //   const handleSubmit = async (e) => {
-  //     e.preventDefault();
-  //     try {
-  //       if (
-  //         !userDetails.email &&
-  //         !userDetails.firstName &&
-  //         !userDetails.phoneNumber &&
-  //         !userDetails.lastName &&
-  //         !userDetails.address &&
-  //         !userDetails.city &&
-  //         !userDetails.userState &&
-  //         !userDetails.zipCode
-  //       ) {
-  //         toast.error("Please Fill the all Fields", {
-  //           autoClose: 500,
-  //           theme: "colored",
-  //         });
-  //       } else if (
-  //         userDetails.firstName.length < 3 ||
-  //         userDetails.lastName.length < 3
-  //       ) {
-  //         toast.error("Please enter name with more than 3 characters", {
-  //           autoClose: 500,
-  //           theme: "colored",
-  //         });
-  //       } else if (!emailRegex.test(userDetails.email)) {
-  //         toast.error("Please enter valid email", {
-  //           autoClose: 500,
-  //           theme: "colored",
-  //         });
-  //       } else if (!phoneRegex.test(userDetails.phoneNumber)) {
-  //         toast.error("Please enter a valid phone number", {
-  //           autoClose: 500,
-  //           theme: "colored",
-  //         });
-  //       } else if (!userDetails.address) {
-  //         toast.error("Please add address", { autoClose: 500, theme: "colored" });
-  //       } else if (!userDetails.city) {
-  //         toast.error("Please add city", { autoClose: 500, theme: "colored" });
-  //       } else if (!userDetails.zipCode) {
-  //         toast.error("Please enter valid Zip code", {
-  //           autoClose: 500,
-  //           theme: "colored",
-  //         });
-  //       } else if (!userDetails.userState) {
-  //         toast.error("Please add state", { autoClose: 500, theme: "colored" });
-  //       } else {
-  //         const { data } = await axios.put(
-  //           `${process.env.REACT_APP_UPDATE_USER_DETAILS}`,
-  //           {
-  //             userDetails: JSON.stringify(userDetails),
-  //           },
-  //           {
-  //             headers: {
-  //               Authorization: token,
-  //             },
-  //           }
-  //         );
-  //         if (data.success === true) {
-  //           toast.success("Updated Successfully", {
-  //             autoClose: 500,
-  //             theme: "colored",
-  //           });
-  //           getUserData();
-  //         } else {
-  //           toast.error("Something went wrong", {
-  //             autoClose: 500,
-  //             theme: "colored",
-  //           });
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //       toast.error(error.response.data, { autoClose: 500, theme: "colored" });
-  //     }
-  //   };
-  // const handleResetPassword = async (e) => {
-  //     e.preventDefault()
-  //     try {
-  //         if (!password.currentPassword && !password.newPassword) {
-  //             toast.error("Please Fill the all Fields", { autoClose: 500, theme: 'colored' })
-  //         }
-  //         else if (password.currentPassword.length < 5) {
-  //             toast.error("Please enter valid password", { autoClose: 500, theme: 'colored' })
-  //         }
-  //         else if (password.newPassword.length < 5) {
-  //             toast.error("Please enter password with more than 5 characters", { autoClose: 500, theme: 'colored' })
-  //         }
-  //         else {
-  //             const { data } = await axios.post(`${process.env.REACT_APP_RESET_PASSWORD}`, {
-  //                 id: userData._id,
-  //                 currentPassword: password.currentPassword,
-  //                 newPassword: password.newPassword,
-  //             }, {
-  //                 headers: {
-  //                     'Authorization': authToken
-  //                 }
-  //             })
-  //             toast.success(data, { autoClose: 500, theme: 'colored' })
-  //             setPassword(password.currentPassword = "", password.newPassword = "")
-  //         }
-  //     } catch (error) {
-  //         toast.error(error.response.data, { autoClose: 500, theme: 'colored' })
-  //         console.log(error);
-  //     }
+  const handleSubmit = async (e) => {
+    setloading(true);
+    e.preventDefault();
+    try {
+      if (!userDetails.name && !userDetails.email && !userDetails.mobile) {
+        toast.error("Please Fill the all Fields", {
+          autoClose: 500,
+          theme: "colored",
+        });
+      } else if (!emailRegex.test(userDetails.email)) {
+        toast.error("Please enter valid email", {
+          autoClose: 500,
+          theme: "colored",
+        });
+      } else if (!phoneRegex.test(userDetails.mobile)) {
+        toast.error("Please enter a valid phone number", {
+          autoClose: 500,
+          theme: "colored",
+        });
+      } else {
+        const updateUserResponse = await Fit_Factory_api.put(
+          `/user/updateuserdetails`,
+          {
+            name: userDetails.name,
+            email: userDetails.email,
+            mobile: userDetails.mobile,
+          },
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        if (updateUserResponse.status === 200) {
+          setloading(false);
+          toast.success("Updated Successfully", {
+            autoClose: 500,
+            theme: "colored",
+          });
+          getUserData();
+        } else {
+          setloading(false);
+          toast.error("Something went wrong", {
+            autoClose: 500,
+            theme: "colored",
+          });
+        }
+      }
+    } catch (error) {
+      setloading(false);
+      console.log(error);
+      toast.error(error.response.data, { autoClose: 500, theme: "colored" });
+    }
+  };
 
-  // }
-  // const deleteAccount = async () => {
-  //     try {
-  //         const deleteUser = await axios.delete(`${process.env.REACT_APP_DELETE_USER_DETAILS}/${userData._id}`, {
-  //             headers: {
-  //                 'Authorization': authToken
-  //             }
-  //         });
-  //         toast.success("Account deleted successfully", { autoClose: 500, theme: 'colored' })
-  //         localStorage.removeItem('Authorization');
-  //         sessionStorage.removeItem('totalAmount');
-  //         navigate("/login")
-  //     } catch (error) {
-  //         toast.error(error.response.data, { autoClose: 500, theme: 'colored' })
+  const handleClientSubmit = async (e) => {
+    e.preventDefault();
+    toast.error("Feature Under Construction", {
+      autoClose: 500,
+      theme: "colored",
+    });
+  };
 
-  //     }
-  // }
+  const handleResetPasswordNavigation = () => {
+    navigate("/resetpassword");
+  };
+
+  const deleteAccount = async () => {
+    //     try {
+    //         const deleteUser = await axios.delete(`${process.env.REACT_APP_DELETE_USER_DETAILS}/${userData._id}`, {
+    //             headers: {
+    //                 'Authorization': authToken
+    //             }
+    //         });
+    //         toast.success("Account deleted successfully", { autoClose: 500, theme: 'colored' })
+    //         localStorage.removeItem('Authorization');
+    //         sessionStorage.removeItem('totalAmount');
+    //         navigate("/login")
+    //     } catch (error) {
+    //         toast.error(error.response.data, { autoClose: 500, theme: 'colored' })
+
+    //     }
+    toast.error("Feature Under Construction");
+  };
+
   return (
     <>
       <Container
@@ -232,200 +225,213 @@ const UpdateDetails = () => {
           variant="h6"
           sx={{ margin: "30px 0", fontWeight: "bold", color: "#1976d2" }}
         >
-          {isClient ? "Gym Information" : "Personal Information"}
+          Personal Information
         </Typography>
-
-        <form
-          noValidate
-          autoComplete="off"
-          className={styles.checkout_form}
-          //   onSubmit={}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Name"
-                name="firstName"
-                value={userDetails.name || ""}
-                onChange={handleOnchange}
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Contact Number"
-                type="tel"
-                name="mobile"
-                value={userDetails.mobile || ""}
-                onChange={handleOnchange}
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Email"
-                name="email"
-                value={userDetails.email || ""}
-                onChange={handleOnchange}
-                variant="outlined"
-                fullWidth
-              />
+        {loading ? (
+          <section
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              width: "100%",
+              justifyContent: "space-around",
+              alignItems: "center",
+            }}
+          >
+            <Skeleton variant="text" height={200} width="200px" />
+            <Skeleton variant="text" height={200} width="200px" />
+            <Skeleton variant="text" height={200} width="200px" />
+            <Skeleton variant="text" height={200} width="200px" />
+          </section>
+        ) : (
+          <form noValidate autoComplete="off" className={styles.checkout_form}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Name"
+                  name="name"
+                  value={userDetails.name || ""}
+                  onChange={handleOnchange}
+                  variant="outlined"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Contact Number"
+                  type="tel"
+                  name="mobile"
+                  value={userDetails.mobile || ""}
+                  onChange={handleOnchange}
+                  variant="outlined"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Email"
+                  name="email"
+                  value={userDetails.email || ""}
+                  onChange={handleOnchange}
+                  variant="outlined"
+                  fullWidth
+                />
+              </Grid>
             </Grid>
             {isClient && (
               <>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Address"
-                    name="address"
-                    value={userDetails.address || ""}
-                    onChange={handleOnchange}
-                    variant="outlined"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="City"
-                    name="city"
-                    value={userDetails.city || ""}
-                    onChange={handleOnchange}
-                    variant="outlined"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    type="tel"
-                    label="Postal/Zip Code"
-                    name="zipCode"
-                    value={userDetails.zipCode || ""}
-                    onChange={handleOnchange}
-                    variant="outlined"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Province/State"
-                    name="userState"
-                    value={userDetails.userState || ""}
-                    onChange={handleOnchange}
-                    variant="outlined"
-                    fullWidth
-                  />
+                {" "}
+                <Typography
+                  variant="h6"
+                  sx={{
+                    margin: "30px 0",
+                    fontWeight: "bold",
+                    color: "#1976d2",
+                    textAlign: "center",
+                  }}
+                >
+                  Gym Information
+                </Typography>
+                <Grid container spacing={2} mt={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Gym Name"
+                      name="gym_name"
+                      value={gymDetails.gym_name || ""}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Location"
+                      name="city"
+                      value={gymDetails.location || ""}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      type="Timings"
+                      label="Timings"
+                      name="zipCode"
+                      value={gymDetails.timings || ""}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <div onClick={handleAvatarClick}>
+                      <Avatar
+                        alt="Gym Image"
+                        src={""}
+                        sx={{ width: 50, height: 50 }}
+                      />{" "}
+                      <Button
+                        onClick={toast.error("Feature Under Construction")}
+                      >
+                        Update Image
+                      </Button>
+                      <Typography variant="body1">Image Name: {}</Typography>
+                    </div>
+                  </Grid>
+                  <Modal open={open} onClose={handleCloseModal}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                      }}
+                    >
+                      <img
+                        src={""}
+                        alt="Full Gym Image"
+                        style={{ maxWidth: "75%", maxHeight: "75%" }}
+                      />
+                    </div>
+                  </Modal>
+                  <Grid />
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Address"
+                      name="userState"
+                      value={gymDetails.address || ""}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Description"
+                      name="description"
+                      value={gymDetails.description || ""}
+                      multiline
+                      rows={2}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={4}
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <TextField
+                      label="Gym Price"
+                      name="gym_price"
+                      value={gymDetails.gym_price || ""}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
                 </Grid>
               </>
             )}
-          </Grid>
-          <Container
-            sx={{
-              display: "flex",
-              justifyContent: "space-around",
-              marginTop: 5,
-            }}
-          >
-            <Button
-              variant="contained"
-              endIcon={<TiArrowBackOutline />}
-              onClick={() => navigate(-1)}
+            <Container
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginTop: 5,
+              }}
             >
-              Back
-            </Button>
-            <Button
-              variant="contained"
-              endIcon={<AiOutlineFileDone />}
-              type="submit"
-            >
-              Save
-            </Button>
-          </Container>
-        </form>
-
-        <Typography
-          variant="h6"
-          sx={{ margin: "20px 0", fontWeight: "bold", color: "#1976d2" }}
+              <Button
+                variant="contained"
+                endIcon={<TiArrowBackOutline />}
+                onClick={() => navigate(-1)}
+              >
+                Back
+              </Button>
+              <Button
+                variant="contained"
+                endIcon={<AiOutlineFileDone />}
+                type="submit"
+                onClick={isClient ? handleClientSubmit : handleSubmit}
+              >
+                Save
+              </Button>
+            </Container>
+          </form>
+        )}
+        <Button
+          variant="contained"
+          endIcon={<RiLockPasswordLine />}
+          type="submit"
+          onClick={handleResetPasswordNavigation}
         >
           Reset Password
-        </Typography>
-        <form>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                label="Current Password"
-                name="currentPassword"
-                type={showPassword ? "text" : "password"}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment
-                      position="end"
-                      onClick={handleClickShowPassword}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      {showPassword ? <RiEyeFill /> : <RiEyeOffFill />}
-                    </InputAdornment>
-                  ),
-                }}
-                value={password.currentPassword || ""}
-                onChange={(e) =>
-                  setPassword({
-                    ...password,
-                    [e.target.name]: e.target.value,
-                  })
-                }
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="New Password"
-                name="newPassword"
-                type={showNewPassword ? "text" : "password"}
-                id="password"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment
-                      position="end"
-                      onClick={() => setShowNewPassword(!showNewPassword)}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      {showNewPassword ? <RiEyeFill /> : <RiEyeOffFill />}
-                    </InputAdornment>
-                  ),
-                }}
-                value={password.newPassword || ""}
-                onChange={(e) =>
-                  setPassword({
-                    ...password,
-                    [e.target.name]: e.target.value,
-                  })
-                }
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-          </Grid>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              margin: "25px 0",
-              width: "100%",
-            }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<RiLockPasswordLine />}
-              type="submit"
-            >
-              Reset
-            </Button>
-          </Box>
-        </form>
+        </Button>
+
         <Box
           sx={{
             display: "flex",
@@ -470,7 +476,7 @@ const UpdateDetails = () => {
               variant="contained"
               endIcon={<AiFillDelete />}
               color="error"
-              //   onClick={deleteAccount}
+              onClick={deleteAccount}
             >
               Delete
             </Button>

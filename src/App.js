@@ -31,6 +31,7 @@ import { Navigate } from "react-router-dom";
 import ProtectedClientRoute from "./ProtectRoutes/ProtectedClientRoutes";
 import Unauthorized from "./Unauthorized/Unauthorized";
 import ProtectedUserRoutes from "./ProtectRoutes/ProtectedUserRoutes";
+import ResetPassword from "./Pages/Reset Password/ResetPassword";
 
 function App() {
   const { isClient, isAdmin } = useContext(UserContext);
@@ -65,7 +66,7 @@ function App() {
 
               <Route path="/dashboard" element={<DashBoard />} />
               <Route path="/update" element={<UpdateDetails />} />
-              <Route path="/gymimages/update" element={<GymImages />}/> 
+              <Route path="/gymimages/update" element={<GymImages />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/register" element={<AdminRegister />} />
               <Route path="/admin/home" element={<DashBoard />} />
@@ -74,6 +75,7 @@ function App() {
                 path="/admin/home/product/:type/:id"
                 element={<SingleProduct />}
               />
+              <Route path="/resetpassword" element={<ResetPassword />} />
               <Route path="/unauthorized" element={<Unauthorized />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/wishlist" element={<Wishlist />} />

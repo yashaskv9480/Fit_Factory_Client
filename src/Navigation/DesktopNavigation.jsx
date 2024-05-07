@@ -34,13 +34,10 @@ import {
   handleClose,
   Transition,
 } from "../Constants/Constant";
-import Cookies from "js-cookie";
-import Fit_Factory_api from "../Fit_Factory_Api/Fit_Factory_api";
+
 import { useAuth } from "../Auth/useAuth/useAuth";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import Grow from "@mui/material/Grow";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
+;
+
 
 const DesktopNavigation = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -84,6 +81,8 @@ const DesktopNavigation = () => {
     setAnchorEl(null);
     setOpenAlert(false);
   };
+
+
 
   const handleLogOut = async () => {
     if (setProceed) {
