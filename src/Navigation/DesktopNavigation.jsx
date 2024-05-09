@@ -36,8 +36,7 @@ import {
 } from "../Constants/Constant";
 
 import { useAuth } from "../Auth/useAuth/useAuth";
-;
-
+import ListAltIcon from "@mui/icons-material/ListAlt";
 
 const DesktopNavigation = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -81,8 +80,6 @@ const DesktopNavigation = () => {
     setAnchorEl(null);
     setOpenAlert(false);
   };
-
-
 
   const handleLogOut = async () => {
     if (setProceed) {
@@ -135,22 +132,40 @@ const DesktopNavigation = () => {
             {isauthenticated ? (
               <>
                 {isUser && (
-                  <li className="nav-links">
-                    <Tooltip title="Profile">
-                      <NavLink to="/update">
-                        <span className="nav-icon-span">
-                          {" "}
-                          <CgProfile
-                            style={{
-                              fontSize: 29,
-                              marginTop: 7,
-                              marginRight: 10,
-                            }}
-                          />
-                        </span>
-                      </NavLink>
-                    </Tooltip>
-                  </li>
+                  <>
+                    <li className="nav-links">
+                      <Tooltip title="Bookings">
+                        <NavLink to="/user/bookings">
+                          <span className="nav-icon-span">
+                            {" "}
+                            <ListAltIcon
+                              style={{
+                                fontSize: 29,
+                                marginTop: 7,
+                                marginRight: 10,
+                              }}
+                            />
+                          </span>
+                        </NavLink>
+                      </Tooltip>
+                    </li>
+                    <li className="nav-links">
+                      <Tooltip title="Profile">
+                        <NavLink to="/update">
+                          <span className="nav-icon-span">
+                            {" "}
+                            <CgProfile
+                              style={{
+                                fontSize: 29,
+                                marginTop: 7,
+                                marginRight: 10,
+                              }}
+                            />
+                          </span>
+                        </NavLink>
+                      </Tooltip>
+                    </li>
+                  </>
                 )}
                 {isClient && (
                   <li className="nav-links">

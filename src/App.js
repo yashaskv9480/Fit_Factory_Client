@@ -32,6 +32,8 @@ import ProtectedClientRoute from "./ProtectRoutes/ProtectedClientRoutes";
 import Unauthorized from "./Unauthorized/Unauthorized";
 import ProtectedUserRoutes from "./ProtectRoutes/ProtectedUserRoutes";
 import ResetPassword from "./Pages/Reset Password/ResetPassword";
+import BookingTable from "./Admin/Components/Tables/BookingTable";
+import UserBookings from "./Components/UserBookings/UserBookings";
 
 function App() {
   const { isClient, isAdmin } = useContext(UserContext);
@@ -59,6 +61,7 @@ function App() {
                 element={<ProductDetail />}
               />
               <Route path="gyms/:location" element={<SingleLocation />} />
+              <Route path="/user/bookings" element={<UserBookings />} />
 
               <Route path="/redirect" element={<Redirect />} />
 

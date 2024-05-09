@@ -64,7 +64,7 @@ const ProductDetail = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [bookingDates, setBookingDates] = useState([]);
   const navigate = useNavigate();
-  const token = Cookies.get("Authorization")
+  const token = Cookies.get("Authorization");
 
   let authToken = localStorage.getItem("Authorization");
   let setProceed = authToken ? true : false;
@@ -148,7 +148,7 @@ const ProductDetail = () => {
         data,
         {
           headers: {
-            "Authorization": token,
+            Authorization: token,
           },
         }
       );
@@ -181,7 +181,7 @@ const ProductDetail = () => {
     const formattedStartDate = convertToDateOnly(selecteddate[0].$d);
     const formattedEndDate = selecteddate[1]
       ? convertToDateOnly(selecteddate[1].$d)
-      : null;
+      : formattedStartDate;
 
     if (formattedEndDate == null) {
       setBookingDates(formattedStartDate);
@@ -286,7 +286,7 @@ const ProductDetail = () => {
         <main className="main-content">
           {loading ? (
             <Skeleton variant="rectangular" height={400} />
-          ) :  gymImages.length == 0 ? (
+          ) : gymImages.length == 0 ? (
             <Typography sx={{ textAlign: "center" }}>
               No images have been uploaded by Owner
             </Typography>
@@ -310,7 +310,7 @@ const ProductDetail = () => {
               <Skeleton variant="rectangular" height={200} width="200px" />
               <Skeleton variant="text" height={400} width={700} />
             </section>
-          ): (
+          ) : (
             <Box
               sx={{
                 display: "flex",
@@ -459,11 +459,7 @@ const ProductDetail = () => {
             Share
           </Button>
         </Tooltip>
-        <ProductReview
-          setProceed={setProceed}
-          authToken={authToken}
-          setOpenAlert={setOpenAlert}
-        />
+        <ProductReview gym_id={gym_id} token={token} />
 
         <Typography
           sx={{
