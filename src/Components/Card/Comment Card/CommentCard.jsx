@@ -15,7 +15,6 @@ import { AiFillEdit, AiFillDelete, AiOutlineSend } from "react-icons/ai";
 import { GiCancel } from "react-icons/gi";
 import { toast } from "react-toastify";
 const CommentCard = ({ reviews }) => {
-  console.log(reviews.rating);
   return (
     <Grid
       container

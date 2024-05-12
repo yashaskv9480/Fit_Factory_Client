@@ -63,6 +63,7 @@ const ProductDetail = () => {
   const [formattedEndDate, setFormattedEndDate] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [bookingDates, setBookingDates] = useState([]);
+  const [amount, setAmount] = useState();
   const navigate = useNavigate();
   const token = Cookies.get("Authorization");
 
@@ -71,8 +72,13 @@ const ProductDetail = () => {
 
   useEffect(() => {
     getGymDetails();
-    window.scroll(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (gymDetails) {
+      setAmount(bookingDates.length * gymDetails[0].gym_price);
+    }
+  }, [bookingDates, gymDetails]);
 
   const getGymDetails = async () => {
     try {
@@ -111,19 +117,17 @@ const ProductDetail = () => {
 
   // };
 
-  // const shareProduct = (product) => {
-
-  //     const data = {
-  //         text: product.name,
-  //         title: "e-shopit",
-  //         url: `https://e-shopit.vercel.app/Detail/type/${cat}/${id}`
-  //     }
-  //     if (navigator.canShare && navigator.canShare(data)) {
-  //         navigator.share(data);
-  //     }
-  //     else {
-  //         toast.error("browser not support", { autoClose: 500, theme: 'colored' })
-  //     }
+  const handleShareButtonClick = () => {
+    const currentUrl = window.location.href;
+    navigator.clipboard
+      .writeText(currentUrl)
+      .then(() => {
+        toast.success("URL succesfully copied.");
+      })
+      .catch((error) => {
+        toast.success("Failed to copy the url..");
+      });
+  };
 
   // }
   // const getSimilarProducts = async () => {
@@ -156,7 +160,7 @@ const ProductDetail = () => {
       if (bookingResponse.status === 200) {
         setLoading(false);
         toast.success("Successfully booked. Happy Workout");
-        navigate("/");
+        navigate("/user/bookings");
       } else {
         toast.error("Booking failed");
       }
@@ -173,11 +177,68 @@ const ProductDetail = () => {
     }
   };
 
+  const handlePayment = async () => {
+    try {
+      const orderUrlResponse = await Fit_Factory_api.post(
+        "/payment/orders",
+        { amount: amount },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (orderUrlResponse.status == 200) {
+        await initPayment(orderUrlResponse.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const initPayment = async ({ data }) => {
+    console.log(data.amount);
+    var options = {
+      key: "rzp_test_DXNHJE7x48V7U2",
+      amount: data.amount,
+      currency: data.currency,
+      name: "XYZ",
+      description: "Test Transaction",
+      image: gymImages[0].image_name,
+      order_id: data.id,
+      handler: async (response) => {
+        try {
+          const verifyUrlResponse = await Fit_Factory_api.post(
+            "/payment/verify",
+            response,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+          if (verifyUrlResponse.status == 200) {
+            toast.success("Successfully booked. Happy Workout");
+            navigate("/user/bookings");
+          }
+        } catch (err) {
+          toast.failure("Booking Failed.Refund will intiated to the source");
+          console.log(err);
+        }
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  };
+
   const handleClose = () => {
     setOpenDialog(false);
   };
 
-  const handleDateAccept = (selecteddate) => {
+  const handleDateAccept = async (selecteddate) => {
     const formattedStartDate = convertToDateOnly(selecteddate[0].$d);
     const formattedEndDate = selecteddate[1]
       ? convertToDateOnly(selecteddate[1].$d)
@@ -187,7 +248,7 @@ const ProductDetail = () => {
       setBookingDates(formattedStartDate);
     } else {
       setBookingDates(
-        extractDates(
+        await extractDates(
           formattedStartDate,
           formattedEndDate ? formattedEndDate : null
         )
@@ -210,7 +271,7 @@ const ProductDetail = () => {
     setOpenDialog(false);
   };
 
-  function extractDates(startDateStr, endDateStr) {
+  async function extractDates(startDateStr, endDateStr) {
     const startDate = new Date(startDateStr);
     const endDate = new Date(endDateStr);
 
@@ -240,7 +301,6 @@ const ProductDetail = () => {
     );
   }
 
-  console.log(bookingDates);
   return (
     <>
       <Container maxWidth="xl">
@@ -418,9 +478,7 @@ const ProductDetail = () => {
                       sx={{ marginBottom: "20px" }}
                     >
                       {bookingDates.length !== 0 &&
-                        `Total Price: ${
-                          bookingDates.length * gymDetails[0].gym_price
-                        } Rs `}
+                        `Total Price: ${amount} Rs `}
                     </Typography>
                   </React.Fragment>
                   <Button
@@ -428,7 +486,7 @@ const ProductDetail = () => {
                     onClick={
                       bookingDates.length === 0
                         ? () => toast.error(" Please Choose the dates")
-                        : handleBooking
+                        : handlePayment
                     }
                   >
                     {" "}
@@ -455,6 +513,7 @@ const ProductDetail = () => {
             variant="contained"
             className="all-btn"
             startIcon={<AiOutlineShareAlt />}
+            onClick={handleShareButtonClick}
           >
             Share
           </Button>
