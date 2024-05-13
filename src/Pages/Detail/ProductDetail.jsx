@@ -139,6 +139,42 @@ const ProductDetail = () => {
     setOpenDialog(true);
   };
 
+  const handleCheckDatesBooked = async () => {
+    setLoading(true);
+    const data = {
+      bookingDates,
+      gym_id: gymDetails[0].gym_id,
+    };
+    try {
+      const bookingResponse = await Fit_Factory_api.post(
+        `/user/checkdatebooked`,
+        data,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      if (bookingResponse.status === 200) {
+        await handlePayment();
+      } else {
+        toast.error("Booking failed !", bookingResponse.data);
+      }
+    } catch (err) {
+      setLoading(false);
+      if (err.response.status == 400) {
+        console.log(err.response.data);
+        toast.error(
+          `You have already booked for ${err.response.data.bookedDates}`
+        );
+      } else {
+        console.error(err);
+        toast.error("Booking failed. Plaese Contact admin");
+      }
+    }
+  };
+
   const handleBooking = async () => {
     setLoading(true);
     const data = {
@@ -202,9 +238,8 @@ const ProductDetail = () => {
       key: "rzp_test_DXNHJE7x48V7U2",
       amount: data.amount,
       currency: data.currency,
-      name: "XYZ",
+      name: gymDetails[0].gym_name,
       description: "Test Transaction",
-      image: gymImages[0].image_name,
       order_id: data.id,
       handler: async (response) => {
         try {
@@ -217,9 +252,8 @@ const ProductDetail = () => {
               },
             }
           );
-          if (verifyUrlResponse.status == 200) {
-            toast.success("Successfully booked. Happy Workout");
-            navigate("/user/bookings");
+          if (verifyUrlResponse.status === 200) {
+            await handleBooking();
           }
         } catch (err) {
           toast.failure("Booking Failed.Refund will intiated to the source");
@@ -486,7 +520,7 @@ const ProductDetail = () => {
                     onClick={
                       bookingDates.length === 0
                         ? () => toast.error(" Please Choose the dates")
-                        : handlePayment
+                        : handleCheckDatesBooked
                     }
                   >
                     {" "}
@@ -520,7 +554,7 @@ const ProductDetail = () => {
         </Tooltip>
         <ProductReview gym_id={gym_id} token={token} />
 
-        <Typography
+        {/* <Typography
           sx={{
             marginTop: 10,
             marginBottom: 5,
@@ -529,7 +563,7 @@ const ProductDetail = () => {
           }}
         >
           Similar Products
-        </Typography>
+        </Typography> */}
         {/* <Box>
                     <Box className='similarProduct' sx={{ display: 'flex', overflowX: 'auto', marginBottom: 10 }}>
                         {

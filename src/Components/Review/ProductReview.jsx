@@ -136,84 +136,83 @@ const ProductReview = ({ gym_id, token }) => {
             <Skeleton variant="rectangular" height={200} width="200px" />
             <Skeleton variant="text" height={400} width={700} />
           </section>
-        ) : isauthenticated && (
-          <form onSubmit={handleSubmitReview} className="form">
-            <Box
-              sx={{
-                width: 300,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-              }}
-            >
-              <Rating
-                name="hover-feedback"
-                value={value}
-                precision={0.5}
-                getLabelText={getLabelText}
-                id="rating"
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
-                onChangeActive={(event, newHover) => {
-                  setHover(newHover);
-                }}
-                emptyIcon={
-                  <MdStarRate style={{ opacity: 0.55 }} fontSize="inherit" />
-                }
-              />
-              {value !== null && (
-                <Box className="expression-icon" sx={{ ml: 2 }}>
-                  {labels[hover !== -1 ? hover : value]}
+        ) : (
+          <>
+            {reviews.length >= 1 ? (
+              <Box className="review-box">
+                {reviews.map((review) => (
+                  <CommentCard key={review._id} reviews={review} />
+                ))}
+              </Box>
+            ) : (
+              <Typography sx={{ textAlign: "center" }}>
+                No reviews have been submitted for this product yet. Be the
+                first to add a review!
+              </Typography>
+            )}
+            {isauthenticated && (
+              <form onSubmit={handleSubmitReview} className="form">
+                <Box
+                  sx={{
+                    width: 300,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <Rating
+                    name="hover-feedback"
+                    value={value}
+                    precision={0.5}
+                    getLabelText={getLabelText}
+                    id="rating"
+                    onChange={(event, newValue) => {
+                      setValue(newValue);
+                    }}
+                    onChangeActive={(event, newHover) => {
+                      setHover(newHover);
+                    }}
+                    emptyIcon={
+                      <MdStarRate
+                        style={{ opacity: 0.55 }}
+                        fontSize="inherit"
+                      />
+                    }
+                  />
+                  {value !== null && (
+                    <Box className="expression-icon" sx={{ ml: 2 }}>
+                      {labels[hover !== -1 ? hover : value]}
+                    </Box>
+                  )}
                 </Box>
-              )}
-            </Box>
-            <TextField
-              id="filled-textarea"
-              value={comment}
-              onChange={(e) => {
-                setComment(e.target.value);
-              }}
-              label="Add Review"
-              placeholder="What did you like or dislike?"
-              multiline
-              className="comment"
-              variant="outlined"
-            />
+                <TextField
+                  id="filled-textarea"
+                  value={comment}
+                  onChange={(e) => {
+                    setComment(e.target.value);
+                  }}
+                  label="Add Review"
+                  placeholder="What did you like or dislike?"
+                  multiline
+                  className="comment"
+                  variant="outlined"
+                />
 
-            <Tooltip title="Send Review">
-              <Button
-                className="form-btn"
-                variant="contained"
-                type="submit"
-                endIcon={<MdSend />}
-              >
-                Send
-              </Button>
-            </Tooltip>
-          </form>
+                <Tooltip title="Send Review">
+                  <Button
+                    className="form-btn"
+                    variant="contained"
+                    type="submit"
+                    endIcon={<MdSend />}
+                  >
+                    Send
+                  </Button>
+                </Tooltip>
+              </form>
+            )}
+          </>
         )}
-        <div className="form-img-box">
-          <img
-            src={customerReview}
-            loading="lazy"
-            alt="Customer Review"
-            className="review-img"
-          />
-        </div>
       </div>
-      {reviews.length >= 1 ? (
-        <Box className="review-box">
-          {reviews.map((review) => (
-            <CommentCard key={review._id} reviews={review} />
-          ))}
-        </Box>
-      ) : (
-        <Typography sx={{ textAlign: "center" }}>
-          No reviews have been submitted for this product yet. Be the first to
-          add a review!
-        </Typography>
-      )}
     </>
   );
 };

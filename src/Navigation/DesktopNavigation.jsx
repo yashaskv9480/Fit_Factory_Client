@@ -170,7 +170,7 @@ const DesktopNavigation = () => {
                 {isClient && (
                   <li className="nav-links">
                     <Tooltip title="Profile">
-                      <NavLink to="/update">
+                      <NavLink to="/update/gym">
                         <span className="nav-icon-span">
                           {" "}
                           <FitnessCenterIcon

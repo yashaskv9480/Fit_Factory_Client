@@ -34,6 +34,7 @@ import ProtectedUserRoutes from "./ProtectRoutes/ProtectedUserRoutes";
 import ResetPassword from "./Pages/Reset Password/ResetPassword";
 import BookingTable from "./Admin/Components/Tables/BookingTable";
 import UserBookings from "./Components/UserBookings/UserBookings";
+import UpdateGym from "./Pages/Update_GYm/UpdateGym";
 
 function App() {
   const { isClient, isAdmin } = useContext(UserContext);
@@ -66,6 +67,7 @@ function App() {
               <Route path="/redirect" element={<Redirect />} />
 
               <Route path="/update" element={<UpdateDetails />} />
+              <Route path="/update/gym" element={<UpdateGym />} />
 
               <Route path="/dashboard" element={<DashBoard />} />
               <Route path="/update" element={<UpdateDetails />} />

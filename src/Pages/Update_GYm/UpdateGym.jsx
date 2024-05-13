@@ -34,7 +34,7 @@ import { Skeleton } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Modal from "@mui/material/Modal";
 
-const UpdateDetails = () => {
+const UpdateGym = () => {
   const [open, setOpen] = useState(false);
   const { isClient, isUser } = useAuth();
   const [userData, setUserData] = useState([]);
@@ -70,25 +70,41 @@ const UpdateDetails = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    getUserData();
+    getGymData();
   }, []);
 
-  const getUserData = async () => {
+  const handleAvatarClick = () => {
+    setOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+  };
+
+  const getGymData = async () => {
     try {
-      const userDetailsResponse = await Fit_Factory_api.get(
-        `/user/userdetails`,
+      const gymDetailsResponse = await Fit_Factory_api.get(
+        `/client/viewgymdetails`,
         {
           headers: {
             Authorization: token,
           },
         }
       );
-      if (userDetailsResponse.status == 200) {
+      if (gymDetailsResponse.status == 200) {
         setloading(false);
-        userDetails.name = userDetailsResponse.data[0].name;
-        userDetails.email = userDetailsResponse.data[0].email;
-        userDetails.mobile = userDetailsResponse.data[0].mobile;
-        setUserData(userDetailsResponse.data);
+        userDetails.name = gymDetailsResponse.data[0].user_name;
+        userDetails.email = gymDetailsResponse.data[0].email;
+        userDetails.mobile = gymDetailsResponse.data[0].mobile;
+        gymDetails.gym_name = gymDetailsResponse.data[0].gym_name;
+        gymDetails.image = gymDetailsResponse.data[0].gym_image;
+        gymDetails.location = gymDetailsResponse.data[0].location;
+        gymDetails.address = gymDetailsResponse.data[0].address;
+        gymDetails.timings = gymDetailsResponse.data[0].timings;
+        gymDetails.description = gymDetailsResponse.data[0].description;
+        gymDetails.gym_price = gymDetailsResponse.data[0].gym_price;
+
+        setUserData(gymDetailsResponse.data);
       }
     } catch (error) {
       setloading(false);
@@ -98,6 +114,10 @@ const UpdateDetails = () => {
 
   const handleOnchange = (e) => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
+  };
+
+  const handleOnGgymchange = (e) => {
+    setGymDetails({ ...gymDetails, [e.target.name]: e.target.value });
   };
 
   let phoneRegex = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$/;
@@ -142,7 +162,7 @@ const UpdateDetails = () => {
             autoClose: 500,
             theme: "colored",
           });
-          getUserData();
+          getGymData();
         } else {
           setloading(false);
           toast.error("Something went wrong", {
@@ -200,6 +220,15 @@ const UpdateDetails = () => {
           marginBottom: 10,
         }}
       >
+        {isClient && (
+          <Button
+            variant="contained"
+            endIcon={<EditIcon />}
+            onClick={() => navigate("/gymimages/update")}
+          >
+            Edit Gym Images
+          </Button>
+        )}
         <Typography
           variant="h6"
           sx={{ margin: "30px 0", fontWeight: "bold", color: "#1976d2" }}
@@ -256,7 +285,125 @@ const UpdateDetails = () => {
                 />
               </Grid>
             </Grid>
-
+            {isClient && (
+              <>
+                {" "}
+                <Typography
+                  variant="h6"
+                  sx={{
+                    margin: "30px 0",
+                    fontWeight: "bold",
+                    color: "#1976d2",
+                    textAlign: "center",
+                  }}
+                >
+                  Gym Information
+                </Typography>
+                <Grid container spacing={2} mt={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Gym Name"
+                      name="gym_name"
+                      value={gymDetails.gym_name || ""}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Location"
+                      name="city"
+                      value={gymDetails.location.toUpperCase() || ""}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      type="Timings"
+                      label="Timings"
+                      name="zipCode"
+                      value={gymDetails.timings || ""}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <div onClick={handleAvatarClick}>
+                      <Avatar
+                        alt="Gym Image"
+                        src={""}
+                        sx={{ width: 50, height: 50 }}
+                      />{" "}
+                      <Button>Update Image : Feature Under Construction</Button>
+                      <Typography variant="body1">
+                        Image Name: {gymDetails.image}
+                      </Typography>
+                    </div>
+                  </Grid>
+                  <Modal open={open} onClose={handleCloseModal}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                      }}
+                    >
+                      <img
+                        src={""}
+                        alt="Full Gym Image"
+                        style={{ maxWidth: "75%", maxHeight: "75%" }}
+                      />
+                    </div>
+                  </Modal>
+                  <Grid />
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Address"
+                      name="userState"
+                      value={gymDetails.address || ""}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Description"
+                      name="description"
+                      value={gymDetails.description || ""}
+                      multiline
+                      rows={2}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={4}
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <TextField
+                      label="Gym Price"
+                      name="gym_price"
+                      value={gymDetails.gym_price || ""}
+                      onChange={handleOnGgymchange}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                </Grid>
+              </>
+            )}
             <Container
               sx={{
                 display: "flex",
@@ -275,7 +422,7 @@ const UpdateDetails = () => {
                 variant="contained"
                 endIcon={<AiOutlineFileDone />}
                 type="submit"
-                onClick={handleSubmit}
+                onClick={isClient ? handleClientSubmit : handleSubmit}
               >
                 Save
               </Button>
@@ -355,4 +502,4 @@ const UpdateDetails = () => {
   );
 };
 
-export default UpdateDetails;
+export default UpdateGym;
