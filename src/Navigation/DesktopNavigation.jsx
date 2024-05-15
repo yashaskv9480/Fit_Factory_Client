@@ -37,6 +37,7 @@ import {
 
 import { useAuth } from "../Auth/useAuth/useAuth";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const DesktopNavigation = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -157,6 +158,22 @@ const DesktopNavigation = () => {
                             <CgProfile
                               style={{
                                 fontSize: 29,
+                                marginTop: 7,
+                                marginRight: 10,
+                              }}
+                            />
+                          </span>
+                        </NavLink>
+                      </Tooltip>
+                    </li>
+                    <li className="nav-links">
+                      <Tooltip title="Profile">
+                        <NavLink to="/wishlist">
+                          <span className="nav-icon-span">
+                            {" "}
+                            <FavoriteBorderIcon
+                              style={{
+                                fontSize: 32,
                                 marginTop: 7,
                                 marginRight: 10,
                               }}

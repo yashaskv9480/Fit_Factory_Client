@@ -49,8 +49,6 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import Cookies from "js-cookie";
 
 const ProductDetail = () => {
-  const { cart, setCart, wishlistData, setWishlistData } =
-    useContext(ContextFunction);
   const { isauthenticated } = useAuth();
   const [openAlert, setOpenAlert] = useState(false);
   const { location, gym_id } = useParams();
@@ -95,27 +93,41 @@ const ProductDetail = () => {
     }
   };
 
-  // const addToWhishList = async (product) => {
-  //     if (setProceed) {
-  //         try {
-  //             const { data } = await axios.post(`${process.env.REACT_APP_ADD_WISHLIST}`, { _id: product._id }, {
-  //                 headers: {
-  //                     'Authorization': authToken
-  //                 }
-  //             })
-  //             setWishlistData(data)
-  //             setWishlistData([...wishlistData, product])
-  //             toast.success("Added To Wishlist", { autoClose: 500, theme: 'colored' })
-  //         }
-  //         catch (error) {
-  //             toast.error(error.response.data.msg, { autoClose: 500, theme: 'colored' })
-  //         }
-  //     }
-  //     else {
-  //         setOpenAlert(true);
-  //     }
-
-  // };
+  const addToWhishList = async () => {
+    setLoading(true);
+    try {
+      console.log(token);
+      const addToWhishListResponse = await Fit_Factory_api.post(
+        `/user/addwishlist/${gym_id}`,
+        null,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (addToWhishListResponse.status === 200) {
+        setLoading(false);
+        toast.success("Added To Wishlist", {
+          autoClose: 500,
+          theme: "colored",
+        });
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      if (error.response.status === 409) {
+        toast.error("Already added to wishlist", {
+          autoClose: 500,
+          theme: "colored",
+        });
+      }
+      toast.error("Error in adding to wishlist", {
+        autoClose: 500,
+        theme: "colored",
+      });
+    }
+  };
 
   const handleShareButtonClick = () => {
     const currentUrl = window.location.href;
@@ -537,6 +549,7 @@ const ProductDetail = () => {
             size="small"
             variant="contained"
             className="all-btn"
+            onClick={addToWhishList}
           >
             {<AiFillHeart fontSize={21} />}
           </Button>

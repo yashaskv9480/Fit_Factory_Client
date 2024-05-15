@@ -124,10 +124,19 @@ const UpdateGym = () => {
   let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleSubmit = async (e) => {
-    setloading(true);
     e.preventDefault();
     try {
-      if (!userDetails.name && !userDetails.email && !userDetails.mobile) {
+      if (
+        !userDetails.name &&
+        !userDetails.email &&
+        !userDetails.mobile &&
+        !gymDetails.gym_name &&
+        !gymDetails.location &&
+        !gymDetails.address &&
+        !gymDetails.timings &&
+        !gymDetails.description &&
+        !gymDetails.gym_price
+      ) {
         toast.error("Please Fill the all Fields", {
           autoClose: 500,
           theme: "colored",
@@ -142,13 +151,30 @@ const UpdateGym = () => {
           autoClose: 500,
           theme: "colored",
         });
+      } else if (!/^\d+(\.\d+)?$/.test(gymDetails.gym_price)) {
+        toast.error("Please enter a valid price", {
+          autoClose: 500,
+          theme: "colored",
+        });
+      } else if (gymDetails.description.length > 125) {
+        toast.error("Description should not exceed 125 characters", {
+          autoClose: 500,
+          theme: "colored",
+        });
       } else {
-        const updateUserResponse = await Fit_Factory_api.put(
-          `/user/updateuserdetails`,
+        setloading(true);
+        const gymDetailsResponse = await Fit_Factory_api.put(
+          `/client/updategymdetails`,
           {
             name: userDetails.name,
             email: userDetails.email,
             mobile: userDetails.mobile,
+            gym_name: gymDetails.gym_name,
+            location: gymDetails.location,
+            address: gymDetails.address,
+            timings: gymDetails.timings,
+            description: gymDetails.description,
+            gym_price: gymDetails.gym_price,
           },
           {
             headers: {
@@ -156,7 +182,7 @@ const UpdateGym = () => {
             },
           }
         );
-        if (updateUserResponse.status === 200) {
+        if (gymDetailsResponse.status === 200) {
           setloading(false);
           toast.success("Updated Successfully", {
             autoClose: 500,
@@ -176,14 +202,6 @@ const UpdateGym = () => {
       console.log(error);
       toast.error(error.response.data, { autoClose: 500, theme: "colored" });
     }
-  };
-
-  const handleClientSubmit = async (e) => {
-    e.preventDefault();
-    toast.error("Feature Under Construction", {
-      autoClose: 500,
-      theme: "colored",
-    });
   };
 
   const handleResetPasswordNavigation = () => {
@@ -282,6 +300,9 @@ const UpdateGym = () => {
                   onChange={handleOnchange}
                   variant="outlined"
                   fullWidth
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
               </Grid>
             </Grid>
@@ -325,9 +346,8 @@ const UpdateGym = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      type="Timings"
                       label="Timings"
-                      name="zipCode"
+                      name="timings"
                       value={gymDetails.timings || ""}
                       onChange={handleOnGgymchange}
                       variant="outlined"
@@ -367,7 +387,7 @@ const UpdateGym = () => {
                   <Grid item xs={12}>
                     <TextField
                       label="Address"
-                      name="userState"
+                      name="address"
                       value={gymDetails.address || ""}
                       onChange={handleOnGgymchange}
                       variant="outlined"
@@ -422,7 +442,7 @@ const UpdateGym = () => {
                 variant="contained"
                 endIcon={<AiOutlineFileDone />}
                 type="submit"
-                onClick={isClient ? handleClientSubmit : handleSubmit}
+                onClick={handleSubmit}
               >
                 Save
               </Button>

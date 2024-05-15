@@ -7,7 +7,6 @@ import Cart from "./Pages/Cart/Cart";
 import ProductDetail from "./Pages/Detail/ProductDetail";
 import MobileNavigation from "./Navigation/MobileNavigation";
 import DesktopNavigation from "./Navigation/DesktopNavigation";
-import Wishlist from "./Pages/WhisList/Wishlist";
 import PaymentSuccess from "./Pages/Payment/PaymentSuccess";
 import { Flip, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,6 +34,7 @@ import ResetPassword from "./Pages/Reset Password/ResetPassword";
 import BookingTable from "./Admin/Components/Tables/BookingTable";
 import UserBookings from "./Components/UserBookings/UserBookings";
 import UpdateGym from "./Pages/Update_GYm/UpdateGym";
+import Wishlist from "./WishList/WishList";
 
 function App() {
   const { isClient, isAdmin } = useContext(UserContext);
@@ -61,6 +61,10 @@ function App() {
                 path="/gyms/:location/:gym_id"
                 element={<ProductDetail />}
               />
+              <Route
+                path="/gyms/wishlist/:gym_id"
+                element={<ProductDetail />}
+              />
               <Route path="gyms/:location" element={<SingleLocation />} />
               <Route path="/user/bookings" element={<UserBookings />} />
 
@@ -68,9 +72,10 @@ function App() {
 
               <Route path="/update" element={<UpdateDetails />} />
               <Route path="/update/gym" element={<UpdateGym />} />
+              <Route path="/wishlist" element={<Wishlist />} />
 
               <Route path="/dashboard" element={<DashBoard />} />
-              <Route path="/update" element={<UpdateDetails />} />
+    
               <Route path="/gymimages/update" element={<GymImages />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/register" element={<AdminRegister />} />
@@ -83,7 +88,6 @@ function App() {
               <Route path="/resetpassword" element={<ResetPassword />} />
               <Route path="/unauthorized" element={<Unauthorized />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/checkout" element={<CheckoutForm />} />
               <Route path="/paymentsuccess" element={<PaymentSuccess />} />
               <Route path="/forgotpassword" element={<ForgotPasswordForm />} />

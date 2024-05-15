@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-} from "@mui/material"; // Import necessary components from Material-UI
+} from "@mui/material"; 
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import Fit_Factory_api from "../../Fit_Factory_Api/Fit_Factory_api";
