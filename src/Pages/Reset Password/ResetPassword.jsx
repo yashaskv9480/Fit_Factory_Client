@@ -67,15 +67,18 @@ const ResetPassword = () => {
         setloading(false);
         setPasswordExists(true);
       } else if (getCurrentPasswordResponse.status == 202) {
+        setloading(false)
         setPasswordExists(false);
       } else {
         toast.error("Error Contact admin");
       }
     } catch (err) {
+      console.log(err)
       setloading(false);
       toast.error("Error Contact admin");
     }
   };
+
 
   const handleOauthResetPassword = async (e) => {
     setloading(true);
@@ -206,11 +209,11 @@ const ResetPassword = () => {
           }}
         >
           <form>
-            {!passwordExists && (
+            {passwordExists == false && (
               <Typography
                 variant="h6"
                 sx={{ margin: "30px 0", fontWeight: "bold", color: "#1976d2" }}
-              >
+              > 
                 Your Setting Password for the first time
               </Typography>
             )}

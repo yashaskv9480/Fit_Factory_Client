@@ -253,6 +253,9 @@ const UpdateDetails = () => {
                   onChange={handleOnchange}
                   variant="outlined"
                   fullWidth
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
               </Grid>
             </Grid>

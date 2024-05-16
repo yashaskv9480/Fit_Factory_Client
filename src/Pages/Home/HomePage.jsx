@@ -12,6 +12,8 @@ import CopyRight from "../../Components/CopyRight/CopyRight";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { useAuth } from "../../Auth/useAuth/useAuth";
+import Header from "./Header";
+import GetStarted from "./GetStarted";
 
 const HomePage = () => {
   const { isUser } = useAuth();
@@ -45,11 +47,9 @@ const HomePage = () => {
           marginBottom: 70,
         }}
       >
-        {!isUser && (
-          <Box padding={1}>
-            <Carousel />
-          </Box>
-        )}
+        <Header />
+        <GetStarted/>
+
         {isUser && (
           <Container
             style={{ marginTop: 90, display: "flex", justifyContent: "center" }}

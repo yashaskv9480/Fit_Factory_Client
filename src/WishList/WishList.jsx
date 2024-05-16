@@ -102,7 +102,7 @@ const Wishlist = () => {
               fontWeight: "bold",
             }}
           >
-            "No gyms available at the selected location"
+            "Wishlist is Empty"
           </Typography>
         ) : (
           <Container
@@ -115,8 +115,10 @@ const Wishlist = () => {
               paddingBottom: 20,
               marginBottom: 30,
             }}
-          >            {gyms.map((gym) => (
-              <WishListCard gym={gym} token = {token}/>
+          >
+            {" "}
+            {gyms.map((gym) => (
+              <WishListCard gym={gym} token={token} />
             ))}
           </Container>
         )}

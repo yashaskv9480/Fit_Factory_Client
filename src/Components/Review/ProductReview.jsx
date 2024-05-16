@@ -77,7 +77,6 @@ const ProductReview = ({ gym_id, token }) => {
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
-    setloading(true);
     if (!comment && !value) {
       toast.error("Please Fill the all Fields", {
         theme: "colored",
@@ -92,6 +91,7 @@ const ProductReview = ({ gym_id, token }) => {
       toast.error("Please add rating", { theme: "colored", autoClose: 500 });
     } else if (comment.length >= 4 && value > 0) {
       try {
+        setloading(true);
         const addReviewResponse = await Fit_Factory_api.post(
           `/user/addreview`,
           { review: comment, rating: value, gym_id },

@@ -35,6 +35,7 @@ import BookingTable from "./Admin/Components/Tables/BookingTable";
 import UserBookings from "./Components/UserBookings/UserBookings";
 import UpdateGym from "./Pages/Update_GYm/UpdateGym";
 import Wishlist from "./WishList/WishList";
+import Footer from "./Footer/Footer";
 
 function App() {
   const { isClient, isAdmin } = useContext(UserContext);
@@ -53,6 +54,7 @@ function App() {
             <Routes>
               <Route path="/" index element={<HomePage />} />
               <Route path="/client/login" element={<Login client />} />
+              <Route path="/admin/login" element={<Login client />} />
               <Route path="/user/login" element={<Login />} />
               <Route path="/user/register" element={<Register />} />
               <Route path="/client/register" element={<Register client />} />
@@ -75,7 +77,7 @@ function App() {
               <Route path="/wishlist" element={<Wishlist />} />
 
               <Route path="/dashboard" element={<DashBoard />} />
-    
+
               <Route path="/gymimages/update" element={<GymImages />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/register" element={<AdminRegister />} />
@@ -85,6 +87,7 @@ function App() {
                 path="/admin/home/product/:type/:id"
                 element={<SingleProduct />}
               />
+
               <Route path="/resetpassword" element={<ResetPassword />} />
               <Route path="/unauthorized" element={<Unauthorized />} />
               <Route path="/cart" element={<Cart />} />

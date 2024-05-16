@@ -543,17 +543,19 @@ const ProductDetail = () => {
             </Box>
           )}
         </main>
-        <Tooltip title="Add To Wishlist">
-          <Button
-            style={{ marginLeft: 10 }}
-            size="small"
-            variant="contained"
-            className="all-btn"
-            onClick={addToWhishList}
-          >
-            {<AiFillHeart fontSize={21} />}
-          </Button>
-        </Tooltip>
+        {isauthenticated && (
+          <Tooltip title="Add To Wishlist">
+            <Button
+              style={{ marginLeft: 10 }}
+              size="small"
+              variant="contained"
+              className="all-btn"
+              onClick={addToWhishList}
+            >
+              {<AiFillHeart fontSize={21} />}
+            </Button>
+          </Tooltip>
+        )}
         <Tooltip title="Share">
           <Button
             style={{ marginLeft: 10 }}

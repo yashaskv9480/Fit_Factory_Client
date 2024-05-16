@@ -105,9 +105,15 @@ const DesktopNavigation = () => {
       <nav className="nav">
         <div className="logo">
           <Link to={isClient || isAdmin ? "/dashboard" : "/"}>
+            <img
+              src="logo.png"
+              alt="Fit Factory Logo"
+              style={{ width: "50px", height: "auto", marginRight: "10px" }}
+            />
             <span>Fit Factory</span>
           </Link>
         </div>
+
         <div className="nav-items">
           <ul className="nav-items">
             {

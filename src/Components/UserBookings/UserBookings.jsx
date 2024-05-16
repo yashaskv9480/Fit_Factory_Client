@@ -7,6 +7,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Typography,
   Container,
   InputAdornment,
   Skeleton,
@@ -40,7 +41,7 @@ const UserBookings = () => {
         setBookings(response.data);
       }
     } catch (err) {
-      setLoading(false)
+      setLoading(false);
       toast.error("browser not support", { autoClose: 500, theme: "colored" });
       console.log(err);
     }
@@ -83,27 +84,41 @@ const UserBookings = () => {
                   </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {bookings.map((booking) => (
-                  <React.Fragment key={booking.booking_id}>
-                    <TableRow>
-                      <TableCell component="th" scope="row">
-                        {booking.gym_name.toUpperCase()}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(booking.booking_date).toLocaleDateString(
-                          "en-US",
-                          { day: "numeric", month: "short", year: "numeric" }
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <CurrencyRupee style={{ fontSize: "16px" }} />
-                        {booking.amount}
-                      </TableCell>
-                    </TableRow>
-                  </React.Fragment>
-                ))}
-              </TableBody>
+              {bookings.length > 0 ? (
+                <TableBody>
+                  {bookings.map((booking) => (
+                    <React.Fragment key={booking.booking_id}>
+                      <TableRow>
+                        <TableCell component="th" scope="row">
+                          {booking.gym_name.toUpperCase()}
+                        </TableCell>
+                        <TableCell>
+                          {new Date(booking.booking_date).toLocaleDateString(
+                            "en-US",
+                            { day: "numeric", month: "short", year: "numeric" }
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <CurrencyRupee style={{ fontSize: "16px" }} />
+                          {booking.amount}
+                        </TableCell>
+                      </TableRow>
+                    </React.Fragment>
+                  ))}
+                </TableBody>
+              ) : (
+                <Typography
+                  variant="h3"
+                  sx={{
+                    textAlign: "center",
+                    marginTop: 10,
+                    color: "#1976d2",
+                    fontWeight: "bold",
+                  }}
+                >
+                  No Bookings. Book Now . Stay Fit
+                </Typography>
+              )}
             </Table>
           </TableContainer>
         </Paper>
