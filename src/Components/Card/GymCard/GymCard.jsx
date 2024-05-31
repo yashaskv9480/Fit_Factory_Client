@@ -33,6 +33,7 @@ export default function GymCard({ gym }) {
             src={gym.gym_image}
             loading="lazy"
             className={styles.cart_img}
+            height={"225px"}
           />
         </Box>
       </CardActionArea>

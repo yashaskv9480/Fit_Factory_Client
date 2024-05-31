@@ -47,8 +47,12 @@ const HomePage = () => {
           marginBottom: 70,
         }}
       >
-        <Header />
-        <GetStarted/>
+        {!isUser && (
+          <div>
+            <Header />
+            <GetStarted />
+          </div>
+        )}
 
         {isUser && (
           <Container

@@ -17,6 +17,11 @@ import Fit_Factory_api from "../../Fit_Factory_Api/Fit_Factory_api";
 import Cookies from "js-cookie";
 import GymTable from "./Tables/GymTable";
 import BookingTable from "./Tables/BookingTable";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";  
+import MoneyIcon from '@mui/icons-material/Money';
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -57,8 +62,8 @@ export default function BasicTabs() {
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
   const [bookings, setBookings] = useState([]);
-  const [clients,setClients] = useState([]);
-  const [allBookings,setAllBookings] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [allBookings, setAllBookings] = useState([]);
   const token = Cookies.get("Authorization");
 
   useEffect(() => {
@@ -119,11 +124,14 @@ export default function BasicTabs() {
 
   const getAllBookings = async () => {
     try {
-      const allbookingresponse = await Fit_Factory_api.get("/admin/viewallbookings", {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const allbookingresponse = await Fit_Factory_api.get(
+        "/admin/viewallbookings",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
       if (allbookingresponse.status == 200) {
         setAllBookings(allbookingresponse.data);
       }
@@ -160,23 +168,23 @@ export default function BasicTabs() {
               numbers={bookings.length}
               heading="Total Bookings"
               color="#9932CC"
-              icon={<TbReportMoney />}
+              icon={<ListAltIcon />}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={3}>
             <Widget
               numbers={totalClientRevenue}
-              heading="Total Revenue"
+              heading="Total Bookings Amount"
               color="#FFC300"
-              icon={<AiOutlineShoppingCart />}
+              icon={<MoneyIcon />}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={3}>
             <Widget
               numbers={totalClientRevenue * 0.8}
-              heading="Profit"
+              heading="Revenue Generated"
               color="#FFC300"
-              icon={<AiOutlineShoppingCart />}
+              icon={<CurrencyRupeeIcon />}
             />
           </Grid>
         </Grid>
@@ -193,7 +201,7 @@ export default function BasicTabs() {
               numbers={users.length}
               heading="Total Users"
               color="#9932CC"
-              icon={<TbReportMoney />}
+              icon={<CgProfile />}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={3}>
@@ -201,7 +209,7 @@ export default function BasicTabs() {
               numbers={clients.length}
               heading="Total Gyms"
               color="#FFC300"
-              icon={<AiOutlineShoppingCart />}
+              icon={<FitnessCenterIcon />}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={3}>
@@ -209,23 +217,23 @@ export default function BasicTabs() {
               numbers={allBookings.length}
               heading="Total Bookings"
               color="#FF69B4"
-              icon={<CgProfile />}
+              icon={<ListAltIcon />}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={3}>
             <Widget
               numbers={totalRevenue}
-              heading="Total Revenue"
+              heading="Total Bookings Amount"
               color="#1f77b4  "
-              icon={<FaShippingFast />}
+              icon={<MoneyIcon />}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={3}>
             <Widget
               numbers={totalRevenue * 0.2}
-              heading="Profit"
+              heading="Revenue Generated"
               color="#1f77b4  "
-              icon={<FaShippingFast />}
+              icon={<CurrencyRupeeIcon />}
             />
           </Grid>
         </Grid>

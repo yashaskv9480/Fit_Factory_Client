@@ -67,21 +67,19 @@ const ResetPassword = () => {
         setloading(false);
         setPasswordExists(true);
       } else if (getCurrentPasswordResponse.status == 202) {
-        setloading(false)
+        setloading(false);
         setPasswordExists(false);
       } else {
         toast.error("Error Contact admin");
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setloading(false);
       toast.error("Error Contact admin");
     }
   };
 
-
   const handleOauthResetPassword = async (e) => {
-    setloading(true);
     e.preventDefault();
     try {
       if (!password.newPassword) {
@@ -95,6 +93,8 @@ const ResetPassword = () => {
           theme: "colored",
         });
       } else {
+        setloading(true);
+
         const resetOauthPasswordREsponse = await Fit_Factory_api.put(
           `/user/resetoauthpassword`,
           {
@@ -123,7 +123,6 @@ const ResetPassword = () => {
   };
 
   const handleResetPassword = async (e) => {
-    setloading(true);
     e.preventDefault();
     try {
       if (!password.currentPassword && !password.newPassword) {
@@ -131,17 +130,19 @@ const ResetPassword = () => {
           autoClose: 500,
           theme: "colored",
         });
-      } else if (password.currentPassword.length < 5) {
-        toast.error("Please enter valid password", {
-          autoClose: 500,
-          theme: "colored",
-        });
+        // } else if (password.currentPassword.length < ) {
+        //   toast.error("Please enter valid password", {
+        //     autoClose: 500,
+        //     theme: "colored",
+        //   });
       } else if (password.newPassword.length < 5) {
         toast.error("Please enter password with more than 5 characters", {
           autoClose: 500,
           theme: "colored",
         });
       } else {
+        setloading(true);
+
         const resetPasswordResponse = await Fit_Factory_api.put(
           `/user/resetpassword`,
           {
@@ -213,7 +214,7 @@ const ResetPassword = () => {
               <Typography
                 variant="h6"
                 sx={{ margin: "30px 0", fontWeight: "bold", color: "#1976d2" }}
-              > 
+              >
                 Your Setting Password for the first time
               </Typography>
             )}

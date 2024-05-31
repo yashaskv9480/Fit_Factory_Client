@@ -108,7 +108,7 @@ const GymDetails = () => {
             autoClose: 500,
             theme: "colored",
           });
-          navigate("/login");
+          navigate("/client/login");
         } else if (sendAuth.status == 409) {
           setloading(false);
           toast.error("User already exists please sign in!", { autoClose: 500 });

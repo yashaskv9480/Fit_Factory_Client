@@ -100,7 +100,7 @@ const Register = ({ client }) => {
             autoClose: 500,
             theme: "colored",
           });
-          navigate("/login");
+          navigate("/user/login");
         } else {
           setloading(false);
           toast.error("Something went wrong, Please try again", {

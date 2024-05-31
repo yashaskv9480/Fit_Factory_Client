@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Container } from '@mui/material';
 import BasicTabs from '../Components/AdminTabs';
 import CopyRight from '../../Components/CopyRight/CopyRight'
+
 const Dashboard = () => {
     const [user, setUser] = useState([]);
     const [isAdmin, setAdmin] = useState(false);
