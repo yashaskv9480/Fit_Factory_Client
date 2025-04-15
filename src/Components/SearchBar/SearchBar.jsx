@@ -26,7 +26,7 @@ const SearchBar = ({ gyms }) => {
         item.gym_name
           .toLowerCase()
           .includes(event.target.value.toLowerCase()) ||
-        item.address.toLowerCase().includes(event.target.value.toLowerCase())
+        item.address.toLowerCase().includes(event.target.value.toLowerCase()),
     );
     setFilteredData(newFilteredData);
   };

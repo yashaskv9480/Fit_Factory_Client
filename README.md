@@ -19,10 +19,12 @@ You can access the live application at [https://e-shopit.vercel.app/](https://e-
 - Order history
 
 ## Tech Stack
+
 - MongoDB
 - ReactJS
 - NodeJS
 - ExpressJS
+
 ## Images
 
 ![Dashboard](https://res.cloudinary.com/dxguqzge7/image/upload/v1682853694/Stat1_asehhd.png)
@@ -41,16 +43,12 @@ You can access the live application at [https://e-shopit.vercel.app/](https://e-
 
 The backend of the application is built with NodeJS and ExpressJS and uses a MongoDB database to store the product and user data. The source code for the backend can be found at [https://github.com/Saurabh-8585/MERN-E-Commerce-Backend](https://github.com/Saurabh-8585/MERN-E-Commerce-Backend).
 
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
-
-
-
 Unauthorized user
-            setloading(false)
-            toast.error("Unauthorized User", {autoClose: 500})
-            await checkLoggedOut(); 
-            navigate('/login')
+setloading(false)
+toast.error("Unauthorized User", {autoClose: 500})
+await checkLoggedOut();
+navigate('/login')

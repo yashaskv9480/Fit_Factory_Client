@@ -81,7 +81,7 @@ const UpdateDetails = () => {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
       if (userDetailsResponse.status == 200) {
         setloading(false);
@@ -134,7 +134,7 @@ const UpdateDetails = () => {
             headers: {
               Authorization: token,
             },
-          }
+          },
         );
         if (updateUserResponse.status === 200) {
           setloading(false);

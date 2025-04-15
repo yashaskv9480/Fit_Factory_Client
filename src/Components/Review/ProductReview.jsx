@@ -57,7 +57,7 @@ const ProductReview = ({ gym_id, token }) => {
 
   const fetchReviews = async () => {
     const fetchReviewsResponse = await Fit_Factory_api.get(
-      `/user/fetchreview/${gym_id}`
+      `/user/fetchreview/${gym_id}`,
     );
     if (fetchReviewsResponse.status == 200) {
       setloading(false);
@@ -99,7 +99,7 @@ const ProductReview = ({ gym_id, token }) => {
             headers: {
               Authorization: token,
             },
-          }
+          },
         );
         if (addReviewResponse.status == 200) {
           setloading(false);

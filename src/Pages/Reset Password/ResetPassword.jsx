@@ -61,7 +61,7 @@ const ResetPassword = () => {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
       if (getCurrentPasswordResponse.status == 200) {
         setloading(false);
@@ -104,7 +104,7 @@ const ResetPassword = () => {
             headers: {
               Authorization: token,
             },
-          }
+          },
         );
         if (resetOauthPasswordREsponse.status == 200) {
           setloading(false);
@@ -153,7 +153,7 @@ const ResetPassword = () => {
             headers: {
               Authorization: token,
             },
-          }
+          },
         );
         if (resetPasswordResponse.status == 200) {
           setloading(false);

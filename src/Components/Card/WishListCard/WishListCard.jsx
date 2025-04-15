@@ -42,7 +42,7 @@ export default function WishListCard({ gym, token }) {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
       if (response.status === 200) {
         setloading(false);
@@ -123,7 +123,7 @@ export default function WishListCard({ gym, token }) {
               <Button onClick={() => setOpen(false)}>Cancel</Button>
               <Button
                 onClick={() => {
-                  handleDeleteWishlist()
+                  handleDeleteWishlist();
                   setOpen(false);
                 }}
                 style={{ color: "red" }}

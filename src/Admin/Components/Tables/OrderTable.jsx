@@ -35,7 +35,7 @@ const OrderTable = ({ bookings }) => {
                   Booking Date
                 </TableCell>
                 <TableCell sx={{ color: "#1976d2", fontWeight: "bold" }}>
-                   Amount
+                  Amount
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -46,8 +46,16 @@ const OrderTable = ({ bookings }) => {
                     <TableCell component="th" scope="row">
                       {booking.name}
                     </TableCell>
-                    <TableCell>{new Date(booking.booking_date).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}</TableCell>
-                    <TableCell><CurrencyRupee style={{fontSize: "18px"}}/>{booking.amount}</TableCell>
+                    <TableCell>
+                      {new Date(booking.booking_date).toLocaleDateString(
+                        "en-US",
+                        { day: "numeric", month: "short", year: "numeric" },
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <CurrencyRupee style={{ fontSize: "18px" }} />
+                      {booking.amount}
+                    </TableCell>
                   </TableRow>
                 </React.Fragment>
               ))}

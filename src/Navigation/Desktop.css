@@ -56,7 +56,9 @@ nav ul .nav-links:after {
   height: 3px;
   width: 0;
   background: transparent;
-  transition: width 0.7s ease, background-color 0.5s ease;
+  transition:
+    width 0.7s ease,
+    background-color 0.5s ease;
 }
 
 nav ul .nav-links:hover:after {

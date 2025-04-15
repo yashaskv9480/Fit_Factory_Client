@@ -100,7 +100,7 @@ const GymDetails = () => {
           {
             method: "POST",
             body: formData,
-          }
+          },
         );
         if (sendAuth.status == 200) {
           setloading(false);
@@ -111,7 +111,9 @@ const GymDetails = () => {
           navigate("/client/login");
         } else if (sendAuth.status == 409) {
           setloading(false);
-          toast.error("User already exists please sign in!", { autoClose: 500 });
+          toast.error("User already exists please sign in!", {
+            autoClose: 500,
+          });
           // navigate("/login");
         } else {
           setloading(false);

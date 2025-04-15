@@ -14,7 +14,7 @@ root.render(
         <App />
       </Context>
     </UserProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 
 serviceWorkerRegistration.register();

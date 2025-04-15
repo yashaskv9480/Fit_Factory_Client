@@ -1,9 +1,8 @@
-import { Typography } from '@mui/material'
-import React from 'react'
+import { Typography } from "@mui/material";
+import React from "react";
 
 const CopyRight = (props) => {
-    return 
+  return;
+};
 
-}
-
-export default CopyRight
+export default CopyRight;

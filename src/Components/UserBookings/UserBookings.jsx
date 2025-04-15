@@ -95,7 +95,7 @@ const UserBookings = () => {
                         <TableCell>
                           {new Date(booking.booking_date).toLocaleDateString(
                             "en-US",
-                            { day: "numeric", month: "short", year: "numeric" }
+                            { day: "numeric", month: "short", year: "numeric" },
                           )}
                         </TableCell>
                         <TableCell>

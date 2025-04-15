@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-} from "@mui/material"; 
+} from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import Fit_Factory_api from "../../Fit_Factory_Api/Fit_Factory_api";
@@ -88,7 +88,7 @@ export const GymImages = () => {
           headers: {
             Authorization: `${token}`,
           },
-        }
+        },
       );
 
       if (sendAuth.status === 200) {
@@ -130,12 +130,12 @@ export const GymImages = () => {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
       if (response.status === 200) {
         setloading(false);
         setImages((prevImages) =>
-          prevImages.filter((image) => image.image_name !== imageName)
+          prevImages.filter((image) => image.image_name !== imageName),
         );
         toast.success("Image deleted successfully");
       } else {

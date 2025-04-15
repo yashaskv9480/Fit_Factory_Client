@@ -1,47 +1,45 @@
 .main_card {
-    width: 300px;
-    margin: 30px 10px;
-    /* margin-bottom: 110px; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 15px;
-    height: 450px;
-    /* border: 2px solid red; */
-    /* border: 2px solid blue; */
+  width: 300px;
+  margin: 30px 10px;
+  /* margin-bottom: 110px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 15px;
+  height: 450px;
+  /* border: 2px solid red; */
+  /* border: 2px solid blue; */
 }
 
 .card_action {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .cart_box {
-    height: 250px;
-    width: 250px;
+  height: 250px;
+  width: 250px;
 }
 
 .cart_img {
-    width: 100%;
-    object-fit: contain;
-    object-position: center;
+  width: 100%;
+  object-fit: contain;
+  object-position: center;
 }
 
 @media screen and (max-width: 960px) {
-    .main_card {
-        width: 250px;
-        height: 350px;
-    }
+  .main_card {
+    width: 250px;
+    height: 350px;
+  }
 
-    .cart_box {
-        height: 200px;
-        width: 200px;
-
-    }
-
+  .cart_box {
+    height: 200px;
+    width: 200px;
+  }
 }
 
 /* @media (min-width: 768px) and (max-width:1023px) {} */

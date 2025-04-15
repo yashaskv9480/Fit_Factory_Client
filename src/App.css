@@ -3,7 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   /* outline: 3px solid red !important; */
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .main {
@@ -13,12 +13,9 @@
   flex-direction: column;
 }
 
-
-
 a {
   text-decoration: none;
   color: #353535;
-
 }
 
 .all-btn {
@@ -27,12 +24,8 @@ a {
 }
 
 .active {
-
-
   color: #1976d2;
   background-color: transparent;
-
-
 }
 
 .toastContainerBox {
@@ -41,7 +34,7 @@ a {
   align-items: center; */
   width: 300px;
   z-index: 1000;
-  margin:50px auto;
+  margin: 50px auto;
 }
 
 .margin {
@@ -62,14 +55,11 @@ a {
     /* max-width: 250px; */
     /* top: 50px;
     left: 140px; */
-
   }
 
   .margin {
     margin-top: 70px;
   }
-
-
 }
 
 @media (max-width: 768px) {
@@ -78,8 +68,8 @@ a {
   }
 }
 
-
-@media (min-width: 768px) and (max-width:1023px) {}
+@media (min-width: 768px) and (max-width: 1023px) {
+}
 
 /* .placeholder-animation {
   position: relative;

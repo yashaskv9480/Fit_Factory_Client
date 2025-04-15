@@ -89,7 +89,7 @@ const UpdateGym = () => {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
       if (gymDetailsResponse.status == 200) {
         setloading(false);
@@ -180,7 +180,7 @@ const UpdateGym = () => {
             headers: {
               Authorization: token,
             },
-          }
+          },
         );
         if (gymDetailsResponse.status === 200) {
           setloading(false);

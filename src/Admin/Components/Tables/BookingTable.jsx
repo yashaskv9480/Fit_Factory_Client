@@ -48,7 +48,12 @@ const BookingTable = ({ bookings }) => {
                       {booking.name.toUpperCase()}
                     </TableCell>
                     <TableCell>{booking.gym_name.toUpperCase()}</TableCell>
-                    <TableCell>{new Date(booking.booking_date).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}</TableCell>
+                    <TableCell>
+                      {new Date(booking.booking_date).toLocaleDateString(
+                        "en-US",
+                        { day: "numeric", month: "short", year: "numeric" },
+                      )}
+                    </TableCell>
                     <TableCell>
                       <CurrencyRupee style={{ fontSize: "16px" }} />
                       {booking.amount}

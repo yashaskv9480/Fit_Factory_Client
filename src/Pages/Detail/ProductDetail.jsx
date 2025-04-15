@@ -81,7 +81,7 @@ const ProductDetail = () => {
   const getGymDetails = async () => {
     try {
       const response = await Fit_Factory_api.get(
-        `/user/getsinglegym/${gym_id}`
+        `/user/getsinglegym/${gym_id}`,
       );
       if (response.status == 200) {
         setLoading(false);
@@ -104,7 +104,7 @@ const ProductDetail = () => {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
       if (addToWhishListResponse.status === 200) {
         setLoading(false);
@@ -165,7 +165,7 @@ const ProductDetail = () => {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
 
       if (bookingResponse.status === 200) {
@@ -178,7 +178,7 @@ const ProductDetail = () => {
       if (err.response.status == 400) {
         console.log(err.response.data);
         toast.error(
-          `You have already booked for ${err.response.data.bookedDates}`
+          `You have already booked for ${err.response.data.bookedDates}`,
         );
       } else {
         console.error(err);
@@ -202,7 +202,7 @@ const ProductDetail = () => {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
 
       if (bookingResponse.status === 200) {
@@ -216,7 +216,7 @@ const ProductDetail = () => {
       setLoading(false);
       if (err.response.status == 400) {
         toast.error(
-          "You have already booked the particular gym for these Dates !!!"
+          "You have already booked the particular gym for these Dates !!!",
         );
       } else {
         console.error(err);
@@ -234,7 +234,7 @@ const ProductDetail = () => {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
       if (orderUrlResponse.status == 200) {
         await initPayment(orderUrlResponse.data);
@@ -262,7 +262,7 @@ const ProductDetail = () => {
               headers: {
                 Authorization: token,
               },
-            }
+            },
           );
           if (verifyUrlResponse.status === 200) {
             await handleBooking();
@@ -296,8 +296,8 @@ const ProductDetail = () => {
       setBookingDates(
         await extractDates(
           formattedStartDate,
-          formattedEndDate ? formattedEndDate : null
-        )
+          formattedEndDate ? formattedEndDate : null,
+        ),
       );
     }
     setFormattedStartDate(formattedStartDate);

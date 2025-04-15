@@ -18,10 +18,9 @@ import Cookies from "js-cookie";
 import GymTable from "./Tables/GymTable";
 import BookingTable from "./Tables/BookingTable";
 import ListAltIcon from "@mui/icons-material/ListAlt";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";  
-import MoneyIcon from '@mui/icons-material/Money';
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import MoneyIcon from "@mui/icons-material/Money";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -81,7 +80,7 @@ export default function BasicTabs() {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
       if (bookingResponse.status == 200) {
         console.log(bookingResponse.data);
@@ -130,7 +129,7 @@ export default function BasicTabs() {
           headers: {
             Authorization: token,
           },
-        }
+        },
       );
       if (allbookingresponse.status == 200) {
         setAllBookings(allbookingresponse.data);
