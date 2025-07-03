@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from "react";
 import {
-  Grid,
+  Box,
+  Button,
   Card,
-  CardMedia,
   CardActions,
+  CardMedia,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
   IconButton,
   Typography,
-  Button,
-  Box,
 } from "@mui/material";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
+import React, { useEffect, useState } from "react";
 
 import DeleteIcon from "@mui/icons-material/Delete";
-import Fit_Factory_api from "../../Fit_Factory_Api/Fit_Factory_api";
-import { useAuth } from "../../Auth/useAuth/useAuth";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { Skeleton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "../../Auth/useAuth/useAuth";
+import Fit_Factory_api from "../../Fit_Factory_Api/Fit_Factory_api";
 
 export const GymImages = () => {
   const [images, setImages] = useState([]);
@@ -80,10 +78,9 @@ export const GymImages = () => {
     let formData = new FormData();
     formData.append("image", newimage.data);
     try {
-      const sendAuth = await fetch(
-        "http://localhost:5000/api/client/addgymimage",
+      const sendAuth = await Fit_Factory_api.post(
+        "/client/addgymimage",
         {
-          method: "POST",
           body: formData,
           headers: {
             Authorization: `${token}`,

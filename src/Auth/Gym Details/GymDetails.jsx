@@ -1,30 +1,24 @@
-import "../Login/login.css";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   Avatar,
   Button,
-  Checkbox,
+  CircularProgress,
   CssBaseline,
-  FormControlLabel,
   Grid,
-  InputAdornment,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import { MdLockOutline } from "react-icons/md";
-import { Box, Container } from "@mui/system";
-import { toast } from "react-toastify";
-import CopyRight from "../../Components/CopyRight/CopyRight";
-import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
-import { AiOutlineGoogle } from "react-icons/ai";
-import Fit_Factory_api from "../../Fit_Factory_Api/Fit_Factory_api";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import { CircularProgress } from "@mui/material";
+import { Box, Container } from "@mui/system";
+import React, { useEffect, useState } from "react";
+import { MdLockOutline } from "react-icons/md";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import CopyRight from "../../Components/CopyRight/CopyRight";
+import Fit_Factory_api from "../../Fit_Factory_Api/Fit_Factory_api";
+import "../Login/login.css";
 
 const GymDetails = () => {
   const location = useLocation();
@@ -95,10 +89,8 @@ const GymDetails = () => {
         formData.append("location", credentials.location);
         formData.append("address", credentials.address);
         formData.append("gym_price", credentials.gym_price);
-        const sendAuth = await fetch(
-          "http://localhost:5000/api/client/signup",
+        const sendAuth = Fit_Factory_api.post('/client/signup',
           {
-            method: "POST",
             body: formData,
           },
         );
